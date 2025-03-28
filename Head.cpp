@@ -211,10 +211,10 @@ void Block::drawFood(){
             rect1.w += 5;
             break;
         default:
-            break;         
+            break;
     }
     SDL_RenderCopy(gRenderer, gTexture, nullptr, &rect1);
-    
+
     switch (count%5){
         case 0:
             rect1.x += 1;
@@ -247,7 +247,7 @@ void Block::drawFood(){
             rect1.w -= 5;
             break;
         default:
-            break;         
+            break;
     }
 
     SDL_DestroyTexture(gTexture);

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1743170108 source:f:\fighting for learning\game maker\snakegame\main.cpp
+1743177470 source:f:\fighting for learning\game maker\snakegame\main.cpp
 	<iostream>
 	<SDL.h>
 	<random>
@@ -74,12 +74,12 @@
 1743017566 source:f:\fighting for learning\game maker\snakegame\map.cpp
 	"map.h"
 
-1743173518 source:f:\fighting for learning\game maker\snakegame\snake.cpp
+1743177680 source:f:\fighting for learning\game maker\snakegame\snake.cpp
 	"snake.h"
 	"constant.h"
 	"graphics.h"
 
-1743175288 f:\fighting for learning\game maker\snakegame\snake.h
+1743177690 f:\fighting for learning\game maker\snakegame\snake.h
 	<deque>
 	<iostream>
 	"Head.h"
@@ -96,14 +96,14 @@
 	<SDL.h>
 	"constant.h"
 
-1743175258 f:\fighting for learning\game maker\snakegame\head.h
+1743177673 f:\fighting for learning\game maker\snakegame\head.h
 	<SDL.h>
 	"constant.h"
 	<iostream>
 	<random>
 	<deque>
 
-1743173392 source:f:\fighting for learning\game maker\snakegame\head.cpp
+1743177688 source:f:\fighting for learning\game maker\snakegame\head.cpp
 	"Head.h"
 	"constant.h"
 	<iostream>

@@ -647,7 +647,7 @@ public:
         //     cout << "It's not a food\n";
         //     return;
         // }
-        if (type != Type::Food){ {
+        if (type != Type::Food){
             cout << "It's not a food\n";
             return;
         }
