@@ -1,0 +1,190 @@
+#include <SDL.h>
+#include <SDL_image.h>
+#include <iostream>
+#include <vector>
+#include <cstdlib> // For random number generation
+#include <ctime>   // For seeding the random number generator
+
+#include "constant.h"
+
+// Structures
+struct Point {
+    int x, y;
+};
+
+enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+
+// Global variables
+SDL_Window* gWindow = nullptr;
+SDL_Renderer* gRenderer = nullptr;
+std::vector<Point> snake; // The snake's body segments
+Point food;              // The food's position
+Direction currentDirection = RIGHT; // Initial direction
+
+// Function declarations
+bool init();
+void close();
+void initializeGame();
+void updateGame();
+void render();
+
+bool init() {
+    bool success = true;
+
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+        success = false;
+    } else {
+        gWindow = SDL_CreateWindow("Snake Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        if (gWindow == nullptr) {
+            std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+            success = false;
+        } else {
+            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+            if (gRenderer == nullptr) {
+                std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+                success = false;
+            } else {
+                SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF); // Black background
+
+                //Seed random number generator
+                srand(time(NULL));
+            }
+        }
+    }
+    return success;
+}
+
+void close() {
+    SDL_DestroyRenderer(gRenderer);
+    SDL_DestroyWindow(gWindow);
+    gRenderer = nullptr;
+    gWindow = nullptr;
+
+    SDL_Quit();
+}
+
+void initializeGame() {
+  snake.clear();
+  // Start the snake at the center of the screen
+  snake.push_back({SCREEN_WIDTH / (2 * CELL_SIZE), SCREEN_HEIGHT / (2 * CELL_SIZE)});
+
+  //Place food randomly
+  food.x = rand() % (SCREEN_WIDTH / CELL_SIZE);
+  food.y = rand() % (SCREEN_HEIGHT / CELL_SIZE);
+}
+
+void updateGame() {
+    // 1. Calculate the new head position
+    Point newHead = snake[0];
+    switch (currentDirection) {
+        case UP:
+            newHead.y--;
+            break;
+        case DOWN:
+            newHead.y++;
+            break;
+        case LEFT:
+            newHead.x--;
+            break;
+        case RIGHT:
+            newHead.x++;
+            break;
+    }
+
+    // 2. Check for collisions (wall or self)
+    if (newHead.x < 0 || newHead.x >= SCREEN_WIDTH / CELL_SIZE ||
+        newHead.y < 0 || newHead.y >= SCREEN_HEIGHT / CELL_SIZE) {
+        std::cout << "Game Over!  Hit a wall." << std::endl;
+        initializeGame(); // Reset the game
+        return;
+    }
+
+    for (size_t i = 0; i < snake.size(); ++i) {
+        if (newHead.x == snake[i].x && newHead.y == snake[i].y) {
+            std::cout << "Game Over!  Ate yourself." << std::endl;
+            initializeGame(); // Reset the game
+            return;
+        }
+    }
+
+    // 3. Check for food
+    if (newHead.x == food.x && newHead.y == food.y) {
+        // Snake eats the food:  grow the snake and generate new food
+        snake.insert(snake.begin(), newHead); // Add the new head
+        food.x = rand() % (SCREEN_WIDTH / CELL_SIZE);
+        food.y = rand() % (SCREEN_HEIGHT / CELL_SIZE);
+    } else {
+        // Snake moves:  add the new head and remove the tail
+        snake.insert(snake.begin(), newHead);
+        snake.pop_back();
+    }
+}
+
+void render() {
+    SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF); // Black background
+    SDL_RenderClear(gRenderer);
+
+    // Draw the food (red)
+    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF); // Red
+    SDL_Rect foodRect = { food.x * CELL_SIZE, food.y * CELL_SIZE, CELL_SIZE, CELL_SIZE };
+    SDL_RenderFillRect(gRenderer, &foodRect);
+
+    // Draw the snake (green)
+    SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF); // Green
+    for (size_t i = 0; i < snake.size(); ++i) {
+        SDL_Rect snakeRect = { snake[i].x * CELL_SIZE, snake[i].y * CELL_SIZE, CELL_SIZE, CELL_SIZE };
+        SDL_RenderFillRect(gRenderer, &snakeRect);
+    }
+
+    SDL_RenderPresent(gRenderer);
+}
+
+int main(int argc, char* argv[]) {
+    if (!init()) {
+        std::cerr << "Failed to initialize!" << std::endl;
+        return 1;
+    }
+
+    bool quit = false;
+    SDL_Event e;
+
+    initializeGame(); // Initialize the snake and food
+
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            } else if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_UP:
+                        if (currentDirection != DOWN) currentDirection = UP;
+                        break;
+                    case SDLK_DOWN:
+                        if (currentDirection != UP) currentDirection = DOWN;
+                        break;
+                    case SDLK_LEFT:
+                        if (currentDirection != RIGHT) currentDirection = LEFT;
+                        break;
+                    case SDLK_RIGHT:
+                        if (currentDirection != LEFT) currentDirection = RIGHT;
+                        break;
+                }
+            }
+        }
+
+        updateGame();
+        render();
+
+        SDL_Delay(100); //Control the speed (milliseconds)
+    }
+
+    close();
+
+    return 0;
+}

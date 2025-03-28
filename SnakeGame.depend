@@ -1,0 +1,111 @@
+# depslib dependency file v1.0
+1743170108 source:f:\fighting for learning\game maker\snakegame\main.cpp
+	<iostream>
+	<SDL.h>
+	<random>
+	<time.h>
+	"constant.h"
+	"map.h"
+	"graphics.h"
+	"snake.h"
+	"Head.h"
+
+1742780296 source:f:\fighting for learning\game maker\snakegame\close.cpp
+	"close.h"
+	<SDL.h>
+
+1742780280 f:\fighting for learning\game maker\snakegame\close.h
+	<SDL.h>
+
+1742780274 source:f:\fighting for learning\game maker\snakegame\init.cpp
+	"init.h"
+	<iostream>
+	<SDL.h>
+
+1742780263 f:\fighting for learning\game maker\snakegame\init.h
+	<SDL.h>
+
+1742780370 source:f:\fighting for learning\game maker\snakegame\input.cpp
+	"input.h"
+	<SDL.h>
+
+1742780361 f:\fighting for learning\game maker\snakegame\input.h
+	<SDL.h>
+
+1742780319 source:f:\fighting for learning\game maker\snakegame\game.cpp
+	"game.h"
+	<cstdlib>
+	<ctime>
+	<iostream>
+
+1742780486 f:\fighting for learning\game maker\snakegame\game.h
+	<SDL.h>
+	<vector>
+	"input.h"
+
+1742780437 source:f:\fighting for learning\game maker\snakegame\render.cpp
+	"render.h"
+	"game.h"
+	<SDL.h>
+	<vector>
+
+1742780341 f:\fighting for learning\game maker\snakegame\render.h
+	<SDL.h>
+
+1743094196 f:\fighting for learning\game maker\snakegame\constant.h
+	<SDL.h>
+	<SDL_image.h>
+
+1743017525 source:f:\fighting for learning\game maker\snakegame\graphics.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"graphics.h"
+	"constant.h"
+
+1743017506 f:\fighting for learning\game maker\snakegame\graphics.h
+	<SDL.h>
+
+1743017562 f:\fighting for learning\game maker\snakegame\map.h
+	<SDL.h>
+	<iostream>
+	"constant.h"
+
+1743017566 source:f:\fighting for learning\game maker\snakegame\map.cpp
+	"map.h"
+
+1743173518 source:f:\fighting for learning\game maker\snakegame\snake.cpp
+	"snake.h"
+	"constant.h"
+	"graphics.h"
+
+1743175288 f:\fighting for learning\game maker\snakegame\snake.h
+	<deque>
+	<iostream>
+	"Head.h"
+
+1743013398 source:f:\fighting for learning\game maker\snakegame\main1.cpp
+
+1743017287 source:f:\fighting for learning\game maker\snakegame\constant.cpp
+	"constant.h"
+
+1743169876 source:f:\fighting for learning\game maker\snakegame\block.cpp
+
+1743026935 f:\fighting for learning\game maker\snakegame\block.h
+	<iostream>
+	<SDL.h>
+	"constant.h"
+
+1743175258 f:\fighting for learning\game maker\snakegame\head.h
+	<SDL.h>
+	"constant.h"
+	<iostream>
+	<random>
+	<deque>
+
+1743173392 source:f:\fighting for learning\game maker\snakegame\head.cpp
+	"Head.h"
+	"constant.h"
+	<iostream>
+	<SDL.h>
+
