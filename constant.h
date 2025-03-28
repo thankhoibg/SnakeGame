@@ -6,8 +6,10 @@
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
-const int CELL_SIZE = 20;
-const int BOARD_SIZE = 32;
+const int CELL_SIZE = 40;
+const int BOARD_SIZE = 16;
+const double TIME_BIG_FOOD = 5000;
+const int M = 5;
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
 

@@ -83,6 +83,9 @@ void Block::draw(){
         case Type::Food:
             drawFood();
             break;
+        case Type::BigFood:
+            drawBigFood();
+            break;
         default:
             cout << "Cann't regconize type of Block when draw\n";
             exit(0);
@@ -171,12 +174,10 @@ void Block::drawFood(){
 
     gTexture = SDL_CreateTextureFromSurface(gRenderer, apple);
     SDL_Rect rect1;
-    int d = 1;
-    // if (food.type == 1) d = 2;
     rect1.x = rect.x * CELL_SIZE;
     rect1.y = rect.y * CELL_SIZE;
-    rect1.w = CELL_SIZE * d;
-    rect1.h = CELL_SIZE * d;
+    rect1.w = CELL_SIZE;
+    rect1.h = CELL_SIZE;
     static int count = 0;
     count ++;
     switch (count%5){
@@ -215,40 +216,56 @@ void Block::drawFood(){
     }
     SDL_RenderCopy(gRenderer, gTexture, nullptr, &rect1);
 
+    SDL_DestroyTexture(gTexture);
+}
+
+void Block::drawBigFood(){
+    SDL_Texture* gTexture;
+
+    gTexture = SDL_CreateTextureFromSurface(gRenderer, apple);
+    SDL_Rect rect1;
+    rect1.x = rect.x * CELL_SIZE;
+    rect1.y = rect.y * CELL_SIZE;
+    rect1.w = CELL_SIZE * 2;
+    rect1.h = CELL_SIZE * 2;
+    static int count = 0;
+    count ++;
     switch (count%5){
         case 0:
-            rect1.x += 1;
+            rect1.x -= 1;
             rect1.y -= 1;
-            rect1.w -= 1;
-            rect1.h -= 1;
+            rect1.w += 1;
+            rect1.h += 1;
             break;
         case 1:
-            rect1.x += 2;
-            rect1.y += 2;
-            rect1.w -= 2;
-            rect1.h -= 2;
+            rect1.x -= 2;
+            rect1.y -= 2;
+            rect1.w += 2;
+            rect1.h += 2;
             break;
         case 2:
-            rect1.x += 3;
-            rect1.y += 3;
-            rect1.w -= 3;
-            rect1.h -= 3;
+            rect1.x -= 3;
+            rect1.y -= 3;
+            rect1.w += 3;
+            rect1.h += 3;
             break;
         case 3:
-            rect1.x += 4;
-            rect1.y += 4;
-            rect1.w -= 4;
-            rect1.h -= 4;
+            rect1.x -= 4;
+            rect1.y -= 4;
+            rect1.w += 4;
+            rect1.h += 4;
             break;
         case 4:
-            rect1.x += 5;
-            rect1.y += 5;
-            rect1.h -= 5;
-            rect1.w -= 5;
+            rect1.x -= 5;
+            rect1.y -= 5;
+            rect1.h += 5;
+            rect1.w += 5;
             break;
         default:
             break;
     }
+    SDL_RenderCopy(gRenderer, gTexture, nullptr, &rect1);
 
     SDL_DestroyTexture(gTexture);
 }
+

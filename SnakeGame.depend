@@ -1,14 +1,8 @@
 # depslib dependency file v1.0
-1743177470 source:f:\fighting for learning\game maker\snakegame\main.cpp
+1743187935 source:f:\fighting for learning\game maker\snakegame\main.cpp
 	<iostream>
 	<SDL.h>
-	<random>
-	<time.h>
-	"constant.h"
-	"map.h"
-	"graphics.h"
-	"snake.h"
-	"Head.h"
+	<SDL_ttf.h>
 
 1742780296 source:f:\fighting for learning\game maker\snakegame\close.cpp
 	"close.h"
@@ -52,7 +46,7 @@
 1742780341 f:\fighting for learning\game maker\snakegame\render.h
 	<SDL.h>
 
-1743094196 f:\fighting for learning\game maker\snakegame\constant.h
+1743186872 f:\fighting for learning\game maker\snakegame\constant.h
 	<SDL.h>
 	<SDL_image.h>
 
@@ -74,14 +68,16 @@
 1743017566 source:f:\fighting for learning\game maker\snakegame\map.cpp
 	"map.h"
 
-1743177680 source:f:\fighting for learning\game maker\snakegame\snake.cpp
+1743187208 source:f:\fighting for learning\game maker\snakegame\snake.cpp
 	"snake.h"
 	"constant.h"
 	"graphics.h"
+	<ctime>
 
-1743177690 f:\fighting for learning\game maker\snakegame\snake.h
+1743185264 f:\fighting for learning\game maker\snakegame\snake.h
 	<deque>
 	<iostream>
+	<ctime>
 	"Head.h"
 
 1743013398 source:f:\fighting for learning\game maker\snakegame\main1.cpp
@@ -96,14 +92,14 @@
 	<SDL.h>
 	"constant.h"
 
-1743177673 f:\fighting for learning\game maker\snakegame\head.h
+1743182828 f:\fighting for learning\game maker\snakegame\head.h
 	<SDL.h>
 	"constant.h"
 	<iostream>
 	<random>
 	<deque>
 
-1743177688 source:f:\fighting for learning\game maker\snakegame\head.cpp
+1743180575 source:f:\fighting for learning\game maker\snakegame\head.cpp
 	"Head.h"
 	"constant.h"
 	<iostream>

@@ -1,6 +1,7 @@
 #include "snake.h"
 #include "constant.h"
 #include "graphics.h"
+#include <ctime>
 
 void Snake::init(){
     snake.clear();
@@ -23,6 +24,10 @@ void Snake::init(){
 
     food.setFood();
     food.genFood(snake);
+    big_food.setBigFood();
+    big_food.getBigFood().is_appear = false;
+
+    clock_t start_time = clock();
 }
 
 void Snake::draw(){
@@ -30,6 +35,23 @@ void Snake::draw(){
         block.draw();
     }
     food.draw();
+    if (food.getFood().count == M - 1 && big_food.getBigFood().is_appear == false) {
+        big_food.getBigFood().is_appear = true;
+        clock_t now = clock();
+        big_food.getBigFood().time_appear = now - start_time;
+//        cout << big_food.getBigFood().time_appear << '\n';
+        big_food.genFood(snake, 1);
+//        cout << "Big food has been spawned and food.count is reseted\n";
+        food.getFood().count = 0;
+    }
+    clock_t now = clock();
+    double timee = now - start_time;
+    if (timee - big_food.getBigFood().time_appear > TIME_BIG_FOOD) {
+        big_food.getBigFood().is_appear = false;
+        // big food disappear beacause over TIME_BIG_FOOD ms, the snake does not eat big food.
+    }
+//    cout << timee - big_food.getBigFood().time_appear << '\n';
+    if (big_food.getBigFood().is_appear) big_food.draw();
     if (!is_alive){
         freeIMG();
         quitSDL();
@@ -63,9 +85,13 @@ void Snake::move() { // Takes the event as an argument
             break;
     }
     new_head.modify();
-    bool have_eat_food = false;
-    if (food.getFood().type == 0 && new_head.rect.x == food.rect.x && new_head.rect.y == food.rect.y){
+    bool have_eat_food = false, have_eat_big_food = false;
+    if (new_head.rect.x == food.rect.x && new_head.rect.y == food.rect.y){
         have_eat_food = true;
+    }
+    if (big_food.getBigFood().is_appear && new_head.rect.x >= big_food.rect.x && new_head.rect.x <= big_food.rect.x + 1 && new_head.rect.y >= big_food.rect.y && new_head.rect.y <= big_food.rect.y + 1){
+        have_eat_big_food = true;
+        cout << "Big food has been eaten\n";
     }
     snake1.push_front(new_head);
     SDL_Rect rect = head.rect;
@@ -78,13 +104,12 @@ void Snake::move() { // Takes the event as an argument
         rect = rect1;
         if (snake1.back().getType() == Block::Type::Head) body.getBody().getNextDir(snake1.back().getHead());
         else {
-            // body.getBody().getNextDir(snake1.back().getBody());
             body = last;
         }
         snake1.push_back(body);
         last = tmp;
     }
-    if (!have_eat_food){
+    if (!have_eat_food && !have_eat_big_food){
         Block tail = snake.front(); snake.pop_front();
         tail.getTail().getNextDir(snake1.back().getBody());
         tail.rect = rect;
@@ -102,8 +127,16 @@ void Snake::move() { // Takes the event as an argument
         snake1.push_back(tail);
     }
     snake = snake1;
+    if (have_eat_big_food){
+        big_food.getBigFood().is_appear = false;
+        food.getFood().count = 0;
+        length ++;
+    }
     if (have_eat_food){
         food.genFood(snake);
+        food.getFood().count ++;
+        food.getFood().count %= M;
+        length ++;
     }
     if (!isValidSnake()){
         cout << "Snake eat itself\n";
@@ -113,57 +146,112 @@ void Snake::move() { // Takes the event as an argument
 
 
 
+// void Snake::getDir() {
+//     // cout << dir << '\n';
+//     SDL_Event e;
+//     if (SDL_PollEvent(&e) != 0) {
+//         if (e.type == SDL_KEYDOWN) {
+//             switch (e.key.keysym.sym) {
+//                 case SDLK_w:
+//                     if (dir != 1) dir = 0;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 case SDLK_a:
+//                     if (dir != 3) dir = 2;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 case SDLK_s:
+//                     if (dir != 0) dir = 1;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 case SDLK_d:
+//                     if (dir != 2) dir = 3;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 case SDLK_UP: // Arrow up key
+//                     if (dir != 1) dir = 0;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 case SDLK_DOWN: // Arrow down key
+//                     if (dir != 0) dir = 1;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 case SDLK_LEFT: // Arrow left key
+//                     if (dir != 3) dir = 2;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 case SDLK_RIGHT: // Arrow right key
+//                     if (dir != 2) dir = 3;
+//                     dem ++;
+//                     // ok = 1;
+//                     break;
+//                 default:
+//                     break;
+//             }
+//         }
+//     }
+// }
+
 void Snake::getDir() {
-    // cout << dir << '\n';
     SDL_Event e;
-    if (SDL_PollEvent(&e) != 0) {
+    int last_dir = dir; // Store the current direction as a default
+
+    while (SDL_PollEvent(&e) != 0) { // Process ALL events in the queue
         if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
                 case SDLK_w:
-                    if (dir != 1) dir = 0;
+                    if (last_dir != 1) last_dir = 0;
+                    else last_dir = 1;
                     dem ++;
-                    // ok = 1;
                     break;
                 case SDLK_a:
-                    if (dir != 3) dir = 2;
+                    if (last_dir != 3) last_dir = 2;
+                    else last_dir = 3;
                     dem ++;
-                    // ok = 1;
                     break;
                 case SDLK_s:
-                    if (dir != 0) dir = 1;
+                    if (last_dir != 0) last_dir = 1;
+                    else last_dir = 0;
                     dem ++;
-                    // ok = 1;
                     break;
                 case SDLK_d:
-                    if (dir != 2) dir = 3;
+                    if (last_dir != 2) last_dir = 3;
+                    else last_dir = 2;
                     dem ++;
-                    // ok = 1;
                     break;
-                case SDLK_UP: // Arrow up key
-                    if (dir != 1) dir = 0;
+                case SDLK_UP:
+                    if (last_dir != 1) last_dir = 0;
+                    else last_dir = 1;
                     dem ++;
-                    // ok = 1;
                     break;
-                case SDLK_DOWN: // Arrow down key
-                    if (dir != 0) dir = 1;
+                case SDLK_DOWN:
+                    if (last_dir != 0) last_dir = 1;
+                    else last_dir = 0;
                     dem ++;
-                    // ok = 1;
                     break;
-                case SDLK_LEFT: // Arrow left key
-                    if (dir != 3) dir = 2;
+                case SDLK_LEFT:
+                    if (last_dir != 3) last_dir = 2;
+                    else last_dir = 3;
                     dem ++;
-                    // ok = 1;
                     break;
-                case SDLK_RIGHT: // Arrow right key
-                    if (dir != 2) dir = 3;
+                case SDLK_RIGHT:
+                    if (last_dir != 2) last_dir = 3;
+                    else last_dir = 2;
                     dem ++;
-                    // ok = 1;
                     break;
                 default:
                     break;
             }
         }
     }
+    dir = last_dir; // Update the actual snake direction with the last processed input
 }
 
 bool Snake::isValidSnake(){

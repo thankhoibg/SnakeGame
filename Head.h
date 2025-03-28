@@ -478,12 +478,13 @@ struct Tail{
 };
 
 struct Food{
-    int count = 0, type = 0;
+    int count = 0;
 };
 
-// struct BigFood{
-//     bool is_appear = false;
-// };
+struct BigFood{
+    bool is_appear = false;
+    double time_appear = 0.0;
+};
 
 struct Wall{
     bool is_odd = 0;
@@ -491,7 +492,7 @@ struct Wall{
 
 class Block {
 public:
-    enum class Type { Head, Body, Tail, Wall, Food, Empty };
+    enum class Type { Head, Body, Tail, Wall, Food, BigFood, Empty };
     SDL_Rect rect = {0, 0, CELL_SIZE, CELL_SIZE};
     void getPos(int x, int y){
         rect.x = x;
@@ -505,7 +506,7 @@ private:
         Body body;
         Tail tail;
         Food food;
-        // BigFood big_food;
+        BigFood big_food;
     };
 
 public:
@@ -532,9 +533,9 @@ public:
     }
 
     // Constructor that initializes Food
-    // Block(const BigFood& initialBigFood) : type(Type::BigFood) {
-    //     big_food = initialBigFood;
-    // }
+    Block(const BigFood& initialBigFood) : type(Type::BigFood) {
+        big_food = initialBigFood;
+    }
 
 
     Type getType() const { return type; }
@@ -551,9 +552,9 @@ public:
     void setFood(){
         type = Type::Food; // Set the type of the block
     }
-    // void setBigFood(){
-    //     type = Type::BigFood; // Set the type of the block
-    // }
+    void setBigFood(){
+        type = Type::BigFood; // Set the type of the block
+    }
 
     Head& getHead() {
         if (type != Type::Head) {
@@ -619,20 +620,20 @@ public:
         return food;
     }
 
-    // BigFood& getBigFood() {
-    //     if (type != Type::BigFood) {
-    //         std::cerr << "Error: Block is not a Tail!\n";
-    //         exit(1); // Or throw an exception
-    //     }
-    //     return big_food;
-    // }
-    // const BigFood& getBigFood() const {
-    //     if (type != Type::BigFood) {
-    //         std::cerr << "Error: Block is not a Tail!\n";
-    //         exit(1); // Or throw an exception
-    //     }
-    //     return big_food;
-    // }
+    BigFood& getBigFood() {
+        if (type != Type::BigFood) {
+            std::cerr << "Error: Block is not a BigFood!\n";
+            exit(1); // Or throw an exception
+        }
+        return big_food;
+    }
+    const BigFood& getBigFood() const {
+        if (type != Type::BigFood) {
+            std::cerr << "Error: Block is not a BigFood!\n";
+            exit(1); // Or throw an exception
+        }
+        return big_food;
+    }
 
 
     void modify(){
@@ -643,18 +644,10 @@ public:
     }
 
     void genFood(deque<Block> snake, int typee = 0){
-        // if (type != Type::Food || type != Type::BigFood){ {
-        //     cout << "It's not a food\n";
-        //     return;
-        // }
-        if (type != Type::Food){
-            cout << "It's not a food\n";
+        if (type != Type::Food && type != Type::BigFood){
+            cout << "It's not a food 111\n";
             return;
         }
-        int M = 5;
-        if (typee == 0) {food.count ++; food.count %= M;}
-        // if (food.count == M-1) big_food.is_appear = true;
-        // else big_food.is_appear = false;
         int x, y;
         if (typee == 0){
             x = rand() % BOARD_SIZE;
@@ -662,7 +655,7 @@ public:
             while(true){
                 bool ok = true;
                 for(Block block : snake){
-                    if (food.type == 0 && x == block.rect.x && y == block.rect.y) ok = false;
+                    if (x == block.rect.x && y == block.rect.y) ok = false;
                 }
                 if (ok) break;
                 x = rand() % BOARD_SIZE;
@@ -672,19 +665,19 @@ public:
             rect.y = y;
         }
         else {
-            // x = rand() % (BOARD_SIZE - 1);
-            // y = rand() % (BOARD_SIZE - 1);
-            // while(true){
-            //     bool ok = true;
-            //     for(Block block : snake){
-            //         if (x <= block.rect.x && x + 1 >= block.rect.x && y <= block.rect.y && y + 1 >= block.rect.y) ok = false;
-            //     }
-            //     if (ok) break;
-            //     x = rand() % (BOARD_SIZE - 1);
-            //     y = rand() % (BOARD_SIZE - 1);
-            // }
-            // rect.x = x;
-            // rect.y = y;
+             x = rand() % (BOARD_SIZE - 1);
+             y = rand() % (BOARD_SIZE - 1);
+             while(true){
+                 bool ok = true;
+                 for(Block block : snake){
+                     if (x <= block.rect.x && x + 1 >= block.rect.x && y <= block.rect.y && y + 1 >= block.rect.y) ok = false;
+                 }
+                 if (ok) break;
+                 x = rand() % (BOARD_SIZE - 1);
+                 y = rand() % (BOARD_SIZE - 1);
+             }
+             rect.x = x;
+             rect.y = y;
         }
         rect.x = x;
         rect.y = y;
@@ -697,6 +690,7 @@ public:
         cout << "Chua tao\n";
     }
     void drawFood();
+    void drawBigFood();
 };
 
 #endif // _HEAD__H
