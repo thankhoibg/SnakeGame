@@ -8,6 +8,8 @@
 #include "graphics.h"
 #include "snake.h"
 #include "Head.h"
+#include "menu.h"
+#include "admin.h"
 
 using namespace std;
 
@@ -60,13 +62,15 @@ void run2(){
 
 void run3(){
     snake.init();
+    bool is_pressed_p = false;
+    int id;
     while(true){
         map.drawBoard();
         snake.draw();
-        snake.getDir();
+        snake.getDir(is_pressed_p);
 //        cnt ++;
 //        cout << cnt << '\n';
-        snake.move();
+        snake.move(id);
         show();
 //        if (snake.dir == 0) snake.dir = 2;
 //        else if (snake.dir == 2) snake.dir = 1;
@@ -80,12 +84,29 @@ void run3(){
     }
 }
 
+void drawMenu(){
+    Menu main_menu, pause_menu;
+    main_menu.init(); pause_menu.init();
+    main_menu.id = 1; pause_menu.id = 2;
+    while(!main_menu.quit.is_clicked){
+        main_menu.draw();
+        show();
+        main_menu.wait();
+        SDL_Delay(10);
+    }
+}
+
+void useAdmin(){
+    Admin ad;
+    ad.run();
+}
+
 int main(int argc, char* argv[]){
     srand(time(0));
     initSDL();
     initIMG();
 
-    run3();
+    useAdmin();
 
     freeIMG();
     quitSDL();

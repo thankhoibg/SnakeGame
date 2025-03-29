@@ -1,11 +1,17 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "graphics.h"
 #include "constant.h"
 
 using namespace std;
+
+void logErrorAndExit(const char* msg, const char* error){
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "%s: %s", msg, error);
+    SDL_Quit();
+}
 
 void initSDL(){
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -25,10 +31,15 @@ void initSDL(){
         return ;
     }
 
+    if (TTF_Init() == -1) {
+            logErrorAndExit("SDL_ttf could not initialize! SDL_ttf Error: ", TTF_GetError());
+    }
+
     cout << "Init Successfully\n";
 }
 
 void quitSDL(){
+    TTF_Quit();
     IMG_Quit();
 
     SDL_DestroyRenderer(gRenderer);

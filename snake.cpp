@@ -4,6 +4,7 @@
 #include <ctime>
 
 void Snake::init(){
+    score = 0;
     snake.clear();
     Block head;
     head.setHead();
@@ -53,15 +54,15 @@ void Snake::draw(){
 //    cout << timee - big_food.getBigFood().time_appear << '\n';
     if (big_food.getBigFood().is_appear) big_food.draw();
     if (!is_alive){
-        freeIMG();
-        quitSDL();
-        exit(0);
+        // freeIMG();
+        // quitSDL();
+        // exit(0);
     }
 }
 
-void Snake::move() { // Takes the event as an argument
+int Snake::move(int &id) { // Takes the event as an argument
     dem ++;
-    if (dem == 1) return;
+    if (dem == 1) return 0;
     deque<Block> snake1;
     Block head = snake.front(); snake.pop_front();
     Block new_head = head;
@@ -131,16 +132,20 @@ void Snake::move() { // Takes the event as an argument
         big_food.getBigFood().is_appear = false;
         food.getFood().count = 0;
         length ++;
+        score += 5;
     }
     if (have_eat_food){
         food.genFood(snake);
         food.getFood().count ++;
         food.getFood().count %= M;
         length ++;
+        score ++;
     }
     if (!isValidSnake()){
         cout << "Snake eat itself\n";
         is_alive = false;
+        id = 3;
+        return score;
     }
 }
 
@@ -199,7 +204,7 @@ void Snake::move() { // Takes the event as an argument
 //     }
 // }
 
-void Snake::getDir() {
+void Snake::getDir(bool &is_clicked_p) {
     SDL_Event e;
     int last_dir = dir; // Store the current direction as a default
 
@@ -245,6 +250,9 @@ void Snake::getDir() {
                     if (last_dir != 2) last_dir = 3;
                     else last_dir = 2;
                     dem ++;
+                    break;
+                case SDLK_p:
+                    is_clicked_p = true;
                     break;
                 default:
                     break;

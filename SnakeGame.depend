@@ -1,8 +1,16 @@
 # depslib dependency file v1.0
-1743187935 source:f:\fighting for learning\game maker\snakegame\main.cpp
+1743278269 source:f:\fighting for learning\game maker\snakegame\main.cpp
 	<iostream>
 	<SDL.h>
-	<SDL_ttf.h>
+	<random>
+	<time.h>
+	"constant.h"
+	"map.h"
+	"graphics.h"
+	"snake.h"
+	"Head.h"
+	"menu.h"
+	"admin.h"
 
 1742780296 source:f:\fighting for learning\game maker\snakegame\close.cpp
 	"close.h"
@@ -46,18 +54,19 @@
 1742780341 f:\fighting for learning\game maker\snakegame\render.h
 	<SDL.h>
 
-1743186872 f:\fighting for learning\game maker\snakegame\constant.h
+1743276356 f:\fighting for learning\game maker\snakegame\constant.h
 	<SDL.h>
 	<SDL_image.h>
 
-1743017525 source:f:\fighting for learning\game maker\snakegame\graphics.cpp
+1743250147 source:f:\fighting for learning\game maker\snakegame\graphics.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
+	<SDL_ttf.h>
 	"graphics.h"
 	"constant.h"
 
-1743017506 f:\fighting for learning\game maker\snakegame\graphics.h
+1743250153 f:\fighting for learning\game maker\snakegame\graphics.h
 	<SDL.h>
 
 1743017562 f:\fighting for learning\game maker\snakegame\map.h
@@ -68,13 +77,13 @@
 1743017566 source:f:\fighting for learning\game maker\snakegame\map.cpp
 	"map.h"
 
-1743187208 source:f:\fighting for learning\game maker\snakegame\snake.cpp
+1743278521 source:f:\fighting for learning\game maker\snakegame\snake.cpp
 	"snake.h"
 	"constant.h"
 	"graphics.h"
 	<ctime>
 
-1743185264 f:\fighting for learning\game maker\snakegame\snake.h
+1743278254 f:\fighting for learning\game maker\snakegame\snake.h
 	<deque>
 	<iostream>
 	<ctime>
@@ -92,7 +101,7 @@
 	<SDL.h>
 	"constant.h"
 
-1743182828 f:\fighting for learning\game maker\snakegame\head.h
+1743262122 f:\fighting for learning\game maker\snakegame\head.h
 	<SDL.h>
 	"constant.h"
 	<iostream>
@@ -104,4 +113,30 @@
 	"constant.h"
 	<iostream>
 	<SDL.h>
+
+1743278597 source:f:\fighting for learning\game maker\snakegame\menu.cpp
+	"menu.h"
+	"constant.h"
+	<cstring>
+	<iostream>
+
+1743278123 f:\fighting for learning\game maker\snakegame\menu.h
+	"graphics.h"
+	<iostream>
+	"button.h"
+	"snake.h"
+	"map.h"
+
+1743269420 f:\fighting for learning\game maker\snakegame\button.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<cstring>
+	<iostream>
+	"constant.h"
+
+1743278757 f:\fighting for learning\game maker\snakegame\admin.h
+	<iostream>
+	"menu.h"
+	"graphics.h"
 

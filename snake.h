@@ -5,15 +5,15 @@
 #include <ctime>
 #include "Head.h"
 struct Snake{
-    int dir, dem = 0, length = 3;
+    int dir, dem = 0, length = 3, score = 0;
     bool is_alive = true;
     deque<Block> snake;
     Block food, big_food;
     clock_t start_time;
     void init();
     void draw();
-    void move();
-    void getDir();
+    int move(int &id); // return score
+    void getDir(bool &is_clicked_p);
     void modify(int x, int y);
     bool isValidSnake();
 };
