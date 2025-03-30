@@ -650,34 +650,63 @@ public:
         }
         int x, y;
         if (typee == 0){
-            x = rand() % BOARD_SIZE;
-            y = rand() % BOARD_SIZE;
-            while(true){
-                bool ok = true;
-                for(Block block : snake){
-                    if (x == block.rect.x && y == block.rect.y) ok = false;
-                }
-                if (ok) break;
-                x = rand() % BOARD_SIZE;
-                y = rand() % BOARD_SIZE;
+            vector<vector<bool>> vec;
+            vec.resize(BOARD_SIZE);
+            for(auto &v : vec) v.resize(BOARD_SIZE, true);
+            for(Block block : snake){
+                vec[block.rect.x][block.rect.y] = false;
             }
+            vector<pair<int, int>> valid_pos;
+            for(int i = 0; i < BOARD_SIZE; ++ i) for(int j = 0; j < BOARD_SIZE; ++ j){
+                if (vec[i][j]) valid_pos.emplace_back(i, j);
+            }
+            int t = rand() % valid_pos.size();
+            x = valid_pos[t].first;
+            y = valid_pos[t].second;
+//            x = rand() % BOARD_SIZE;
+//            y = rand() % BOARD_SIZE;
+//            while(true){
+//                bool ok = true;
+//                for(Block block : snake){
+//                    if (x == block.rect.x && y == block.rect.y) ok = false;
+//                }
+//                if (ok) break;
+//                x = rand() % BOARD_SIZE;
+//                y = rand() % BOARD_SIZE;
+//            }
             rect.x = x;
             rect.y = y;
         }
         else {
-             x = rand() % (BOARD_SIZE - 1);
-             y = rand() % (BOARD_SIZE - 1);
-             while(true){
-                 bool ok = true;
-                 for(Block block : snake){
-                     if (x <= block.rect.x && x + 1 >= block.rect.x && y <= block.rect.y && y + 1 >= block.rect.y) ok = false;
-                 }
-                 if (ok) break;
-                 x = rand() % (BOARD_SIZE - 1);
-                 y = rand() % (BOARD_SIZE - 1);
-             }
-             rect.x = x;
-             rect.y = y;
+            vector<vector<bool>> vec;
+            vec.resize(BOARD_SIZE);
+            for(auto &v : vec) v.resize(BOARD_SIZE, true);
+            for(Block block : snake){
+                vec[block.rect.x][block.rect.y] = false;
+                if (block.rect.x + 1 < BOARD_SIZE) vec[block.rect.x+1][block.rect.y] = false;
+                if (block.rect.y + 1 < BOARD_SIZE) vec[block.rect.x][block.rect.y+1] = false;
+                if (block.rect.x + 1 < BOARD_SIZE && block.rect.y + 1 < BOARD_SIZE) vec[block.rect.x+1][block.rect.y+1] = false;
+            }
+            vector<pair<int, int>> valid_pos;
+            for(int i = 0; i < BOARD_SIZE; ++ i) for(int j = 0; j < BOARD_SIZE; ++ j){
+                if (vec[i][j]) valid_pos.emplace_back(i, j);
+            }
+            int t = rand() % valid_pos.size();
+            x = valid_pos[t].first;
+            y = valid_pos[t].second;
+//             x = rand() % (BOARD_SIZE - 1);
+//             y = rand() % (BOARD_SIZE - 1);
+//             while(true){
+//                 bool ok = true;
+//                 for(Block block : snake){
+//                     if (x <= block.rect.x && x + 1 >= block.rect.x && y <= block.rect.y && y + 1 >= block.rect.y) ok = false;
+//                 }
+//                 if (ok) break;
+//                 x = rand() % (BOARD_SIZE - 1);
+//                 y = rand() % (BOARD_SIZE - 1);
+//             }
+//             rect.x = x;
+//             rect.y = y;
         }
         rect.x = x;
         rect.y = y;
