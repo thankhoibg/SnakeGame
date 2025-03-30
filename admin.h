@@ -13,6 +13,7 @@ struct Admin{
     // 1: playing normal mod
     // 2: pause screen
     // 3: game over screen
+    // 4: high score screen
     // -2: continue playing normal mod
     void init(){
         id = 0;
@@ -27,8 +28,10 @@ struct Admin{
         pause_screen.init();
         int score;
         GameOverScreen game_over;
+        HighScore high_score;
+        high_score.init();
         while(!main_menu.quit.is_clicked){
-//            cout << id << '\n';
+        //    cout << id << '\n';
             switch (id){
                 case 0:
                     main_menu.draw(id);
@@ -40,11 +43,13 @@ struct Admin{
                     normal_mod.store_snake.init();
                     score = normal_mod.wait(id);
                     game_over.init(score);
+                    high_score.update(score);
                     break;
                 case -2:
                     // continue playing normal mod
                     score = normal_mod.wait(id);
                     game_over.init(score);
+                    high_score.update(score);
                     break;
                 case 2:
                     pause_screen.draw(id);
@@ -57,6 +62,15 @@ struct Admin{
                     show();
                     game_over.wait();
                     // game over screen
+                    break;
+                case 4:
+                    high_score.draw(id);
+                    show();
+                    high_score.wait();
+                    // high score screen
+                    break;
+                default:
+                    cout << "Invalid id\n";
                     break;
             }
             SDL_Delay(50);

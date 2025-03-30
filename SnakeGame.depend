@@ -118,15 +118,16 @@
 	<iostream>
 	<SDL.h>
 
-1743278828 source:f:\fighting for learning\game maker\snakegame\menu.cpp
+1743328136 source:f:\fighting for learning\game maker\snakegame\menu.cpp
 	"menu.h"
 	"constant.h"
 	<cstring>
 	<iostream>
 
-1743278123 f:\fighting for learning\game maker\snakegame\menu.h
+1743327008 f:\fighting for learning\game maker\snakegame\menu.h
 	"graphics.h"
 	<iostream>
+	<fstream>
 	"button.h"
 	"snake.h"
 	"map.h"
@@ -139,7 +140,7 @@
 	<iostream>
 	"constant.h"
 
-1743308534 f:\fighting for learning\game maker\snakegame\admin.h
+1743328687 f:\fighting for learning\game maker\snakegame\admin.h
 	<iostream>
 	"menu.h"
 	"graphics.h"

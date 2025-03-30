@@ -85,17 +85,23 @@ void Menu::wait(){
 }
 
 void MainMenu::init(){
-   play_game.setValue("Play game");
-   play_game.setFont("Arial.ttf", 20);
-   play_game.setRect(100, 100, 300, 200);
-   play_game.color = White;
-   play_game.is_clicked = false;
+    play_game.setValue("Play game");
+    play_game.setFont("Arial.ttf", 20);
+    play_game.setRect(100, 100, 300, 100);
+    play_game.color = White;
+    play_game.is_clicked = false;
 
-   quit.setValue("Quit");
-   quit.setFont("Arial.ttf", 20);
-   quit.setRect(100, 335, 150, 200);
-   quit.color = White;
-   quit.is_clicked = false;
+    quit.setValue("Quit");
+    quit.setFont("Arial.ttf", 20);
+    quit.setRect(100, 335, 150, 100);
+    quit.color = White;
+    quit.is_clicked = false;
+
+    view_high_score.setValue("High Score");
+    view_high_score.setFont("Arial.ttf", 20);
+    view_high_score.setRect(100, 215, 300, 100);
+    view_high_score.color = Ocean_Blue;
+    view_high_score.is_clicked = false;
 }
 
 void MainMenu::draw(int &id){
@@ -118,6 +124,15 @@ void MainMenu::draw(int &id){
        }
    }
    else quit.draw(White, Black);
+   if (view_high_score.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) view_high_score.draw(Red, Black);
+       else {
+           view_high_score.is_clicked = true;
+           id = 4;
+           cout << "View high score screen\n";
+       }
+   }
+   else view_high_score.draw(White, Black);
 }
 
 void MainMenu::loadBackGround(string file_path){
@@ -404,4 +419,100 @@ void GameOverScreen::draw(int &id){
         }
     }
     else play_again.draw(White, Black);
+}
+
+void HighScore::init(){
+    is_clicked = is_quited = false;
+    high_score.setValue("");
+    high_score.setFont("segoesc.ttf", 20);
+    high_score.setRect(480, 220, 50, 80);
+    high_score.color = Ocean_Blue;
+    high_score.is_clicked = false;
+    score_highest_stored_path = "HighestScore.txt";
+
+    quit.setValue("Quit");
+    quit.setFont("segoesc.ttf", 20);
+    quit.setRect(430, 335, 150, 100);
+    quit.color = White;
+    quit.is_clicked = false;
+}
+
+void HighScore::update(int new_score){
+    ifstream inp;
+    inp.open(score_highest_stored_path.c_str());
+    if(!inp.is_open()){
+        cout << "Can not open file\n";
+        return;
+    }
+    ofstream out;
+    out.open(score_highest_stored_path.c_str());
+    if (!out.is_open()){
+        cout << "Can open file\n";
+        return;
+    }
+    int score = 0;
+    inp >> score;
+    score = max(score, new_score);
+    out << score;
+    inp.close();
+    out.close();
+}
+
+void HighScore::draw(int &id){
+    loadBackGround("img/HighestScoreBackGround.jpg");
+    int score = getHighScore();
+    high_score.setValue(to_string(score));
+    high_score.draw(Black, Ocean_Blue);
+    quit.draw(Black, Ocean_Blue);
+    if (quit.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) quit.draw(Red, Black);
+        else {
+            quit.is_clicked = true;
+            id = 0;
+            cout << "Return main menu\n";
+        }
+    }
+}
+
+void HighScore::wait(){
+    SDL_Event event;
+    bool quit = false;
+
+    while (!quit) {
+        int x = -1, y = -1;
+        is_clicked = false;
+        // Handle events
+        while (SDL_PollEvent(&event) != 0) {
+            if (event.type == SDL_QUIT) {
+                quit = true;
+                is_clicked = false;
+            }
+            else if (event.type == SDL_MOUSEMOTION)
+             {
+                SDL_GetMouseState(&x, &y);
+                is_clicked = false;
+            }
+            else if (event.type == SDL_MOUSEBUTTONDOWN){
+                is_clicked = true;
+            }
+        }
+
+        if (x != -1) {
+            mouse_x = x;
+            mouse_y = y;
+        }
+
+        SDL_Delay(50);
+        break;
+    }
+}
+
+void HighScore::loadBackGround(string file_path){
+    SDL_Surface* back_ground;
+    back_ground = IMG_Load(file_path.c_str());
+    SDL_Texture* gTexture = SDL_CreateTextureFromSurface(gRenderer, back_ground);
+    SDL_Rect rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    SDL_RenderCopy(gRenderer, gTexture, NULL, &rect);
+    SDL_FreeSurface(back_ground);
+    SDL_DestroyTexture(gTexture);
 }

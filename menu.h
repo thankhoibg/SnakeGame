@@ -3,6 +3,7 @@
 
 #include "graphics.h"
 #include <iostream>
+#include <fstream>
 #include "button.h"
 #include "snake.h"
 #include "map.h"
@@ -20,7 +21,7 @@ struct Menu{
 };
 
 struct MainMenu{
-    Button play_game, quit;
+    Button play_game, quit, view_high_score;
     int mouse_x, mouse_y;
     bool is_clicked, is_quited, is_paused = false;
     void init();
@@ -58,6 +59,29 @@ struct GameOverScreen{
     void draw(int &id);
     void loadBackGround(string file_path);
     void wait();
+};
+
+struct HighScore{
+    string score_highest_stored_path;
+    int mouse_x, mouse_y;
+    bool is_clicked, is_quited, is_paused = false;
+    Button high_score, quit;
+    void init();
+    void update(int score);
+    void draw(int &id);
+    void wait();
+    void loadBackGround(string file_path);
+    int getHighScore(){
+        ifstream input_file(score_highest_stored_path);
+        if (!input_file.is_open()){
+            cout << "Cannot open file\n";
+            return 0;
+        }
+        int high_score;
+        input_file >> high_score;
+        input_file.close();
+        return high_score;
+    }
 };
 
 #endif // _MENU__H
