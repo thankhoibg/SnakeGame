@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1743278269 source:f:\fighting for learning\game maker\snakegame\main.cpp
+1743335228 source:f:\fighting for learning\game maker\snakegame\main.cpp
 	<iostream>
 	<SDL.h>
 	<random>
@@ -58,7 +58,7 @@
 	<SDL.h>
 	<SDL_image.h>
 
-1743250147 source:f:\fighting for learning\game maker\snakegame\graphics.cpp
+1743335627 source:f:\fighting for learning\game maker\snakegame\graphics.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -66,8 +66,9 @@
 	"graphics.h"
 	"constant.h"
 
-1743250153 f:\fighting for learning\game maker\snakegame\graphics.h
+1743331448 f:\fighting for learning\game maker\snakegame\graphics.h
 	<SDL.h>
+	<SDL_mixer.h>
 
 1743017562 f:\fighting for learning\game maker\snakegame\map.h
 	<SDL.h>
@@ -77,7 +78,7 @@
 1743017566 source:f:\fighting for learning\game maker\snakegame\map.cpp
 	"map.h"
 
-1743308317 source:f:\fighting for learning\game maker\snakegame\snake.cpp
+1743333020 source:f:\fighting for learning\game maker\snakegame\snake.cpp
 	"snake.h"
 	"constant.h"
 	"graphics.h"
@@ -86,12 +87,13 @@
 	<SDL_image.h>
 	"button.h"
 
-1743304884 f:\fighting for learning\game maker\snakegame\snake.h
+1743332977 f:\fighting for learning\game maker\snakegame\snake.h
 	<deque>
 	<iostream>
 	<ctime>
 	"Head.h"
 	"button.h"
+	"sound.h"
 
 1743013398 source:f:\fighting for learning\game maker\snakegame\main1.cpp
 
@@ -118,7 +120,7 @@
 	<iostream>
 	<SDL.h>
 
-1743328136 source:f:\fighting for learning\game maker\snakegame\menu.cpp
+1743332680 source:f:\fighting for learning\game maker\snakegame\menu.cpp
 	"menu.h"
 	"constant.h"
 	<cstring>
@@ -140,8 +142,20 @@
 	<iostream>
 	"constant.h"
 
-1743328687 f:\fighting for learning\game maker\snakegame\admin.h
+1743334198 f:\fighting for learning\game maker\snakegame\admin.h
 	<iostream>
 	"menu.h"
 	"graphics.h"
+	"sound.h"
+
+1743334278 source:f:\fighting for learning\game maker\snakegame\sound.cpp
+	"sound.h"
+
+1743335163 f:\fighting for learning\game maker\snakegame\sound.h
+	<iostream>
+	<vector>
+	<string>
+	<SDL_mixer.h>
+	"graphics.h"
+	"constant.h"
 

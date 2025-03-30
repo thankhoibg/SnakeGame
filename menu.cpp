@@ -452,7 +452,8 @@ void HighScore::update(int new_score){
     }
     int score = 0;
     inp >> score;
-    score = max(score, new_score);
+    if (new_score != -1) score = max(score, new_score);
+    else score = 0;
     out << score;
     inp.close();
     out.close();

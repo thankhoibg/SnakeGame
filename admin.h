@@ -4,6 +4,7 @@
 #include <iostream>
 #include "menu.h"
 #include "graphics.h"
+#include "sound.h"
 
 using namespace std;
 
@@ -19,6 +20,15 @@ struct Admin{
         id = 0;
     }
     void run(){
+
+        // Sound my_sound;
+        // my_sound.init();
+        // my_sound.playBackGroundMusic();
+
+        // SDL_Delay(50000);
+
+        // exit(0);
+
         id = 0;
         MainMenu main_menu;
         main_menu.init();
@@ -30,6 +40,11 @@ struct Admin{
         GameOverScreen game_over;
         HighScore high_score;
         high_score.init();
+        high_score.update(-1);
+        Sound sound;
+        sound.init();
+        normal_mod.snake.sound = sound;
+        normal_mod.store_snake.sound = sound;
         while(!main_menu.quit.is_clicked){
         //    cout << id << '\n';
             switch (id){

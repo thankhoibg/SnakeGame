@@ -49,6 +49,8 @@
 		<Unit filename="menu.h" />
 		<Unit filename="snake.cpp" />
 		<Unit filename="snake.h" />
+		<Unit filename="sound.cpp" />
+		<Unit filename="sound.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

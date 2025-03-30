@@ -5,6 +5,7 @@
 #include <ctime>
 #include "Head.h"
 #include "button.h"
+#include "sound.h"
 struct Snake{
     int dir, dem = 0, length = 3, score = 0;
     bool is_alive = true;
@@ -12,6 +13,7 @@ struct Snake{
     Block food, big_food;
     clock_t start_time;
     Button score_board;
+    Sound sound;
     void init();
     void draw();
     int move(int &id); // return score

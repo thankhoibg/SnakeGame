@@ -163,6 +163,7 @@ int Snake::move(int &id) { // Takes the event as an argument
         food.getFood().count = 0;
         length ++;
         score += 5;
+        sound.playEatAppleSound();
     }
     if (have_eat_food){
         food.genFood(snake);
@@ -170,6 +171,7 @@ int Snake::move(int &id) { // Takes the event as an argument
         food.getFood().count %= M;
         length ++;
         score ++;
+        sound.playEatAppleSound();
     }
     if (!isValidSnake()){
         cout << "Snake eat itself\n";

@@ -106,6 +106,9 @@ int main(int argc, char* argv[]){
     initSDL();
     initIMG();
 
+    Mix_Chunk *gJump = loadSound("assets\\jump.wav");
+    play(gJump);
+
     useAdmin();
 
     freeIMG();
