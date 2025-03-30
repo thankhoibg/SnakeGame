@@ -23,7 +23,7 @@
    + Right Arrow | D : Di chuyển sang phải
 
 # Demo
-   [Link Demo]([https://youtu.be/mlhKzPW-HCY])
+   + Link Demo:([https://youtu.be/mlhKzPW-HCY])
 
 
 # Các kỹ thuật sử dụng
