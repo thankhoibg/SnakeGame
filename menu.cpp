@@ -108,6 +108,12 @@ void MainMenu::init(){
     change_back_ground_music.setRect(100, 335, 600, 100);
     change_back_ground_music.color = Ocean_Blue;
     change_back_ground_music.is_clicked = false;
+
+    ai_mode.setValue("Play AI Mode");
+    ai_mode.setFont("Arial.ttf", 20);
+    ai_mode.setRect(640, 100, 600, 100);
+    ai_mode.color = Ocean_Blue;
+    ai_mode.is_clicked = false;
 }
 
 void MainMenu::draw(int &id){
@@ -148,6 +154,15 @@ void MainMenu::draw(int &id){
        }
    }
    else change_back_ground_music.draw(White, Black);
+   if (ai_mode.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) ai_mode.draw(Red, Black);
+       else {
+            ai_mode.is_clicked = true;
+            id = 6;
+            cout << "Play AI Mode\n";
+       }
+   }
+   else ai_mode.draw(White, Black);
 }
 
 void MainMenu::draw(int &id, int &cnt){
@@ -189,6 +204,15 @@ void MainMenu::draw(int &id, int &cnt){
        }
    }
    else change_back_ground_music.draw(White, Black);
+   if (ai_mode.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) ai_mode.draw(Red, Black);
+       else {
+            ai_mode.is_clicked = true;
+            id = 6;
+            cout << "Play AI Mode\n";
+       }
+   }
+   else ai_mode.draw(White, Black);
 }
 
 void MainMenu::loadBackGround(string file_path){
@@ -247,6 +271,53 @@ void NormalMod::init(){
     is_clicked = false;
 }
 
+int NormalMod::wait(int &id, int &id1){
+    // cout << "Has entered\n";
+    snake = store_snake;
+    // while(true){
+    //     map.drawBoard();
+    //     snake.draw();
+    //     snake.getDir();
+    //     snake.move();
+    //     show();
+    //     SDL_Delay(80);
+    // }
+
+
+    SDL_Event event;
+    bool quit = false;
+    int score = 0;
+
+    while (!quit) {
+        SDL_Event event;
+        bool pKeyPressed = false;
+
+        if (!snake.is_alive) {
+            id = 3;
+            store_snake.init();
+            return score;
+        }
+        map.drawBoard();
+        snake.draw();
+        snake.getDir(pKeyPressed);
+        score = snake.move(id);
+        show();
+
+        if (pKeyPressed) {
+            quit = true;
+            cout << "Player has paused the game\n";
+            id = 2;
+            id1 = -2;
+            store_snake = snake;
+        }
+
+        SDL_Delay(80);
+
+    }
+
+    return score;
+}
+
 int NormalMod::wait(int &id){
     // cout << "Has entered\n";
     snake = store_snake;
@@ -277,6 +348,104 @@ int NormalMod::wait(int &id){
         snake.draw();
         snake.getDir(pKeyPressed);
         score = snake.move(id);
+        show();
+
+        if (pKeyPressed) {
+            quit = true;
+            cout << "Player has paused the game\n";
+            id = 2;
+            store_snake = snake;
+        }
+
+        SDL_Delay(80);
+
+    }
+
+    return score;
+}
+
+void AIMod::init(){
+    is_paused = false;
+    is_alive = true;
+    is_clicked = false;
+}
+
+int AIMod::wait(int &id, int &id1){
+    snake = store_snake;
+
+    SDL_Event event;
+    bool quit = false;
+    int score = 0;
+
+    vector<int> dir_stored;
+    dir_stored.clear();
+
+    while (!quit) {
+        SDL_Event event;
+        bool pKeyPressed = false;
+
+        if (!snake.is_alive) {
+            id = 3;
+            store_snake.init();
+            return score;
+        }
+        map.drawBoard();
+        snake.draw();
+        if (dir_stored.empty())
+            snake.getDir(pKeyPressed, dir_stored);
+        int x = snake.snake.front().rect.x, y = snake.snake.front().rect.y;
+        snake.dir = dir_stored[0];
+        score = snake.move(id);
+        if (snake.snake.front().rect.x != x || snake.snake.front().rect.y != y) {
+            dir_stored.erase(dir_stored.begin());
+        }
+        show();
+
+        if (pKeyPressed) {
+            quit = true;
+            cout << "Player has paused the game\n";
+            id = 2;
+            id1 = -3;
+            store_snake = snake;
+        }
+
+        SDL_Delay(80);
+
+    }
+
+    return score;
+}
+
+
+int AIMod::wait(int &id){
+    snake = store_snake;
+
+    SDL_Event event;
+    bool quit = false;
+    int score = 0;
+
+    vector<int> dir_stored;
+    dir_stored.clear();
+
+    while (!quit) {
+        SDL_Event event;
+        bool pKeyPressed = false;
+
+        if (!snake.is_alive) {
+            id = 3;
+            store_snake.init();
+            return score;
+        }
+        map.drawBoard();
+        snake.draw();
+        if (dir_stored.empty())
+            snake.getDir(pKeyPressed, dir_stored);
+        int x = snake.snake.front().rect.x, y = snake.snake.front().rect.y;
+        snake.dir = dir_stored[0];
+        score = snake.move(id);
+        if (snake.snake.front().rect.x != x || snake.snake.front().rect.y != y) {
+            dir_stored.erase(dir_stored.begin());
+        }
         show();
 
         if (pKeyPressed) {
@@ -345,6 +514,37 @@ void PauseScreen::wait(){
         SDL_Delay(50);
         break;
     }
+}
+
+void PauseScreen::draw(int &id, int id1){
+    loadMiniBackGround("img/PauseBackground.jpg", {0, 0, 640, 640});
+    if (continue_play.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) continue_play.draw(Ocean_Blue, Black);
+        else {
+            continue_play.is_clicked = true;
+            id = id1;
+            cout << "Game continued\n";
+        }
+    }
+    else continue_play.draw(White, Black);
+    if (quit.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) quit.draw(Red, Black);
+        else {
+            quit.is_clicked = true;
+            id = 0;
+            cout << "Return main menu\n";
+        }
+    }
+    else quit.draw(White, Black);
+    if (play_again.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) play_again.draw(Yellow, Black);
+        else {
+            play_again.is_clicked = true;
+            id = 1;
+            cout << "Play again\n";
+        }
+    }
+    else play_again.draw(White, Black);
 }
 
 void PauseScreen::draw(int &id){

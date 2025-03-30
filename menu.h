@@ -7,6 +7,7 @@
 #include "button.h"
 #include "snake.h"
 #include "map.h"
+#include "aisnake.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ struct Menu{
 };
 
 struct MainMenu{
-    Button play_game, quit, view_high_score, change_back_ground_music;
+    Button play_game, quit, view_high_score, change_back_ground_music, ai_mode;
     int mouse_x, mouse_y;
     bool is_clicked, is_quited, is_paused = false;
     void init();
@@ -37,6 +38,18 @@ struct NormalMod{
     Snake snake, store_snake;
     Map map;
     void init();
+    int wait(int &id, int &id1);
+    int wait(int &id);
+    bool run();
+};
+
+struct AIMod{
+    bool is_paused, is_alive;
+    bool is_clicked, is_use_store_snake;
+    AI snake, store_snake;
+    Map map;
+    void init();
+    int wait(int &id, int &id1);
     int wait(int &id);
     bool run();
 };
@@ -46,6 +59,7 @@ struct PauseScreen{
     int mouse_x, mouse_y;
     bool is_clicked, is_quited, is_paused = false;
     void init();
+    void draw(int &id, int id1);
     void draw(int &id);
     // void loadBackGround(string file_path);
     void loadMiniBackGround(string file_path, SDL_Rect);

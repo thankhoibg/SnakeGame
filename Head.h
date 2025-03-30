@@ -688,7 +688,7 @@ public:
                 if (block.rect.x + 1 < BOARD_SIZE && block.rect.y + 1 < BOARD_SIZE) vec[block.rect.x+1][block.rect.y+1] = false;
             }
             vector<pair<int, int>> valid_pos;
-            for(int i = 0; i < BOARD_SIZE; ++ i) for(int j = 0; j < BOARD_SIZE; ++ j){
+            for(int i = 0; i < BOARD_SIZE-1; ++ i) for(int j = 0; j < BOARD_SIZE-1; ++ j){
                 if (vec[i][j]) valid_pos.emplace_back(i, j);
             }
             int t = rand() % valid_pos.size();

@@ -1,14 +1,16 @@
-#include "snake.h"
+#include "aisnake.h"
 #include "constant.h"
 #include "graphics.h"
 #include <ctime>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <algorithm>
+#include <random>
 #include "button.h"
 
-SDL_Surface* score_back_ground_1;
+SDL_Surface* score_back_ground;
 
-void Snake::init(){
+void AI::init(){
     // init the snake has 3 block: 1 head, 1 body and 1 tail at the middle of the board game
     score = 0;
     snake.clear();
@@ -42,12 +44,12 @@ void Snake::init(){
     score_board.setRect(700, 40, 50, 70);
     score_board.color = Black;
     score_board.draw(Black, Red);
-    score_back_ground_1 = IMG_Load("img/ScoreBackGround.jpg");
+    score_back_ground = IMG_Load("img/ScoreBackGround.jpg");
 
     clock_t start_time = clock();
 }
 
-void Snake::draw(){
+void AI::draw(){
     for (auto& block : snake){
         block.draw();
     }
@@ -75,7 +77,7 @@ void Snake::draw(){
 //     score board will load the score text right after the score text
 //     the rect of the score text will be {800, 220, 50, 50}
     score_board.setValue(to_string(score));
-    SDL_Texture* gTexture = SDL_CreateTextureFromSurface(gRenderer, score_back_ground_1);
+    SDL_Texture* gTexture = SDL_CreateTextureFromSurface(gRenderer, score_back_ground);
     SDL_Rect my_rect = {640, 0, 320, 640};
     SDL_RenderCopy(gRenderer, gTexture, NULL, &my_rect);
 
@@ -91,7 +93,7 @@ void Snake::draw(){
     }
 }
 
-int Snake::move(int &id) { // Takes the event as an argument
+int AI::move(int &id) { // Takes the event as an argument
     dem ++;
     if (dem == 1) return 0;
     deque<Block> snake1;
@@ -184,108 +186,11 @@ int Snake::move(int &id) { // Takes the event as an argument
     }
 }
 
-
-
-// void Snake::getDir() {
-//     // cout << dir << '\n';
-//     SDL_Event e;
-//     if (SDL_PollEvent(&e) != 0) {
-//         if (e.type == SDL_KEYDOWN) {
-//             switch (e.key.keysym.sym) {
-//                 case SDLK_w:
-//                     if (dir != 1) dir = 0;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 case SDLK_a:
-//                     if (dir != 3) dir = 2;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 case SDLK_s:
-//                     if (dir != 0) dir = 1;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 case SDLK_d:
-//                     if (dir != 2) dir = 3;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 case SDLK_UP: // Arrow up key
-//                     if (dir != 1) dir = 0;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 case SDLK_DOWN: // Arrow down key
-//                     if (dir != 0) dir = 1;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 case SDLK_LEFT: // Arrow left key
-//                     if (dir != 3) dir = 2;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 case SDLK_RIGHT: // Arrow right key
-//                     if (dir != 2) dir = 3;
-//                     dem ++;
-//                     // ok = 1;
-//                     break;
-//                 default:
-//                     break;
-//             }
-//         }
-//     }
-// }
-
-void Snake::getDir(bool &is_clicked_p) {
+void AI::getDir(bool &is_clicked_p, vector<int> &dir_store) {
     SDL_Event e;
-    int last_dir = dir; // Store the current direction as a default
-
-    while (SDL_PollEvent(&e) != 0) { // Process ALL events in the queue
+    while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
-                case SDLK_w:
-                    if (last_dir != 1) last_dir = 0;
-                    else last_dir = 1;
-                    dem ++;
-                    break;
-                case SDLK_a:
-                    if (last_dir != 3) last_dir = 2;
-                    else last_dir = 3;
-                    dem ++;
-                    break;
-                case SDLK_s:
-                    if (last_dir != 0) last_dir = 1;
-                    else last_dir = 0;
-                    dem ++;
-                    break;
-                case SDLK_d:
-                    if (last_dir != 2) last_dir = 3;
-                    else last_dir = 2;
-                    dem ++;
-                    break;
-                case SDLK_UP:
-                    if (last_dir != 1) last_dir = 0;
-                    else last_dir = 1;
-                    dem ++;
-                    break;
-                case SDLK_DOWN:
-                    if (last_dir != 0) last_dir = 1;
-                    else last_dir = 0;
-                    dem ++;
-                    break;
-                case SDLK_LEFT:
-                    if (last_dir != 3) last_dir = 2;
-                    else last_dir = 3;
-                    dem ++;
-                    break;
-                case SDLK_RIGHT:
-                    if (last_dir != 2) last_dir = 3;
-                    else last_dir = 2;
-                    dem ++;
-                    break;
                 case SDLK_p:
                     is_clicked_p = true;
                     break;
@@ -294,10 +199,115 @@ void Snake::getDir(bool &is_clicked_p) {
             }
         }
     }
-    dir = last_dir; // Update the actual snake direction with the last processed input
+
+    vector<vector<bool>> is_valid_block;
+    is_valid_block.resize(BOARD_SIZE);
+    for(auto &v : is_valid_block) v.resize(BOARD_SIZE, true);
+    for(Block block : snake){
+        is_valid_block[block.rect.x][block.rect.y] = false;
+    }
+    pair<int, int> goal;
+    if (big_food.getBigFood().is_appear) goal = make_pair(big_food.rect.x, big_food.rect.y);
+    else goal = make_pair(food.rect.x, food.rect.y);
+    vector<vector<vector<int>>> d;
+    vector<vector<vector<pair<pair<int,int>,int>>>> trace;
+    d.resize(BOARD_SIZE);
+    trace.resize(BOARD_SIZE);
+    for(auto &v : d) v.resize(BOARD_SIZE);
+    for(auto &v : trace) v.resize(BOARD_SIZE);
+    for(int i = 0; i < BOARD_SIZE; ++ i) for(int j = 0; j < BOARD_SIZE; ++ j){
+        d[i][j].resize(4, (int)1e9);
+        trace[i][j].resize(4);
+    }
+    d[snake.front().rect.x][snake.front().rect.y][dir] = 0;
+    queue<pair<pair<int,int>,int>> q;
+    q.push(make_pair(make_pair(snake.front().rect.x, snake.front().rect.y), dir));
+    auto checkValidDir = [](int cur_dir, int next_dir){
+        int mn = min(cur_dir, next_dir);
+        int mx = max(cur_dir, next_dir);
+        if (mn == 0 && mx == 1) return false;
+        if (mn == 2 && mx == 3) return false;
+        return true;
+    };
+    while(!q.empty()){
+        pair<pair<int,int>,int> tmp = q.front(); q.pop();
+        int x, y, cur_dir;
+        x = tmp.first.first;
+        y = tmp.first.second;
+        cur_dir = tmp.second;
+//        auto [x, y, cur_dir] = q.front(); q.pop();
+        for(int next_dir = 0; next_dir < 4; ++ next_dir){
+            if (!checkValidDir(cur_dir, next_dir)) continue;
+            int u = x, v = y;
+            switch (next_dir){
+                case 0:
+                    v --;
+                    break;
+                case 1:
+                    v ++;
+                    break;
+                case 2:
+                    u --;
+                    break;
+                case 3:
+                    u ++;
+                    break;
+                default:
+                    cout << "Invalid next dir\n";
+                    break;
+            }
+            u = (u + BOARD_SIZE) % BOARD_SIZE;
+            v = (v + BOARD_SIZE) % BOARD_SIZE;
+            if (!is_valid_block[u][v]) continue;
+            if (d[u][v][next_dir] > d[x][y][cur_dir] + 1) {
+                d[u][v][next_dir] = d[x][y][cur_dir] + 1;
+                trace[u][v][next_dir] = make_pair(make_pair(x, y), cur_dir);
+                if (u != goal.first || v != goal.second)
+                    q.push(make_pair(make_pair(u, v), next_dir));
+            }
+        }
+    }
+    int dir_1 = 3;
+    for(int i = 2; i >= 0; -- i) {
+        if (d[goal.first][goal.second][i] < d[goal.first][goal.second][dir_1]) dir_1 = i;
+    }
+    int u = goal.first, v = goal.second;
+//    cout << d[u][v][dir_1] << '\n';
+    if (d[u][v][dir_1] == (int)1e9){
+        // There is no way to reach the food, and I will make the snake run into random dir
+        dir_store.push_back(rand() % 4);
+        cout << "There is no way to reach the food and I will make the snake run random\n";
+        return;
+//        exit(0);
+    }
+    int dir_2;
+//    cout << d[u][v][dir_1] << ' ' << dir_1 << ' ';
+//    cout << "The goal of us is " << u << ' ' << v << '\n';
+//    cout << "We have to go total " << d[u][v][dir_1] << " steps\n";
+    while(u != snake.front().rect.x || v != snake.front().rect.y || dir_1 != dir){
+        pair<pair<int,int>,int> tmp = trace[u][v][dir_1];
+        dir_store.push_back(dir_1);
+//        auto [x,y,z] = trace[u][v][dir_1];
+        int x, y, z;
+        x = tmp.first.first;
+        y = tmp.first.second;
+        z = tmp.second;
+//        cout << x << ' ' << y << ' ' << z << '\n';
+        dir_2 = dir_1;
+        u = x;
+        v = y;
+        dir_1 = z;
+    }
+//    dir_store.push_back(dir_1);
+    reverse(dir_store.begin(), dir_store.end());
+//    cout << dir << ' ' << dir_1 << '\n';
+    static int cnt = 0;
+    cnt ++;
+//    cout << dir << ' ' << dir_1 << '\n';
+    dir = dir_1;
 }
 
-bool Snake::isValidSnake(){
+bool AI::isValidSnake(){
     vector<vector<bool>> is_occupied;
     is_occupied.resize(BOARD_SIZE);
     for (int i = 0; i < BOARD_SIZE; i++){
