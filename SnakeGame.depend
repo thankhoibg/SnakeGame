@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1743364659 source:f:\fighting for learning\game maker\snakegame\main.cpp
+1743365607 source:f:\fighting for learning\game maker\snakegame\main.cpp
 	<iostream>
 	<SDL.h>
 	<random>
@@ -79,7 +79,7 @@
 1743017566 source:f:\fighting for learning\game maker\snakegame\map.cpp
 	"map.h"
 
-1743358205 source:f:\fighting for learning\game maker\snakegame\snake.cpp
+1743366630 source:f:\fighting for learning\game maker\snakegame\snake.cpp
 	"snake.h"
 	"constant.h"
 	"graphics.h"
@@ -88,7 +88,7 @@
 	<SDL_image.h>
 	"button.h"
 
-1743351233 f:\fighting for learning\game maker\snakegame\snake.h
+1743366603 f:\fighting for learning\game maker\snakegame\snake.h
 	<deque>
 	<iostream>
 	<ctime>
@@ -125,13 +125,13 @@
 	<iostream>
 	<SDL.h>
 
-1743364872 source:f:\fighting for learning\game maker\snakegame\menu.cpp
+1743366793 source:f:\fighting for learning\game maker\snakegame\menu.cpp
 	"menu.h"
 	"constant.h"
 	<cstring>
 	<iostream>
 
-1743364809 f:\fighting for learning\game maker\snakegame\menu.h
+1743366881 f:\fighting for learning\game maker\snakegame\menu.h
 	"graphics.h"
 	<iostream>
 	<fstream>
@@ -148,7 +148,7 @@
 	<iostream>
 	"constant.h"
 
-1743364888 f:\fighting for learning\game maker\snakegame\admin.h
+1743366722 f:\fighting for learning\game maker\snakegame\admin.h
 	<iostream>
 	"menu.h"
 	"graphics.h"
@@ -163,7 +163,7 @@
 	<string>
 	<SDL_mixer.h>
 
-1743363314 source:f:\fighting for learning\game maker\snakegame\aisnake.cpp
+1743366667 source:f:\fighting for learning\game maker\snakegame\aisnake.cpp
 	"aisnake.h"
 	"constant.h"
 	"graphics.h"
@@ -174,7 +174,7 @@
 	<random>
 	"button.h"
 
-1743362484 f:\fighting for learning\game maker\snakegame\aisnake.h
+1743366645 f:\fighting for learning\game maker\snakegame\aisnake.h
 	<deque>
 	<iostream>
 	<ctime>

@@ -22,6 +22,7 @@ struct AI{
     void init();
     void draw();
     int move(int &id); // return score
+    int move(int &id, int &id1); // return score
     void getDir(bool &is_clicked_p, vector<int> &dir_store);
     void modify(int x, int y);
     bool isValidSnake();

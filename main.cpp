@@ -16,7 +16,7 @@ using namespace std;
 
 void useAdmin(){
     Admin ad;
-    ad.run1();
+    ad.run();
 }
 
 int main(int argc, char* argv[]){

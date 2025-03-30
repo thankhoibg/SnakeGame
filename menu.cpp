@@ -389,13 +389,16 @@ int AIMod::wait(int &id, int &id1){
             store_snake.init();
             return score;
         }
+
+
         map.drawBoard();
         snake.draw();
+        cout << "We are here\n";
         if (dir_stored.empty())
             snake.getDir(pKeyPressed, dir_stored);
         int x = snake.snake.front().rect.x, y = snake.snake.front().rect.y;
         snake.dir = dir_stored[0];
-        score = snake.move(id);
+        score = snake.move(id, id1);
         if (snake.snake.front().rect.x != x || snake.snake.front().rect.y != y) {
             dir_stored.erase(dir_stored.begin());
         }
@@ -523,6 +526,10 @@ void PauseScreen::draw(int &id, int id1){
         else {
             continue_play.is_clicked = true;
             id = id1;
+            if (id1 != -2 && id1 != -3){
+                cout << "Unidentify id1\n";
+                exit(0);
+            }
             cout << "Game continued\n";
         }
     }
@@ -676,6 +683,36 @@ void GameOverScreen::draw(int &id){
         else {
             play_again.is_clicked = true;
             id = 1;
+            cout << "Play again\n";
+        }
+    }
+    else play_again.draw(White, Black);
+}
+
+void GameOverScreen::draw(int &id, int id1){
+    loadBackGround("img/GameOverBackground.jpg");
+    if (present_score.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) present_score.draw(Ocean_Blue, Black);
+        else {
+            present_score.is_clicked = true;
+            cout << "Viewing high score\n";
+        }
+    }
+    else present_score.draw(White, Black);
+    if (quit.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) quit.draw(Red, Black);
+        else {
+            quit.is_clicked = true;
+            id = 0;
+            cout << "Return main menu\n";
+        }
+    }
+    else quit.draw(White, Black);
+    if (play_again.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) play_again.draw(Yellow, Black);
+        else {
+            play_again.is_clicked = true;
+            id = id1;
             cout << "Play again\n";
         }
     }

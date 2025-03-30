@@ -59,6 +59,7 @@ struct PauseScreen{
     int mouse_x, mouse_y;
     bool is_clicked, is_quited, is_paused = false;
     void init();
+    void draw(int &id, int id1, int id2);
     void draw(int &id, int id1);
     void draw(int &id);
     // void loadBackGround(string file_path);
@@ -72,6 +73,7 @@ struct GameOverScreen{
     bool is_clicked, is_quited, is_paused = false;
     void init(int score);
     void draw(int &id);
+    void draw(int &id, int id1);
     void loadBackGround(string file_path);
     void wait();
 };

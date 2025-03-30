@@ -21,6 +21,7 @@ struct Snake{
     void init();
     void draw();
     int move(int &id); // return score
+    int move(int &id, int &id1); // return score
     void getDir(bool &is_clicked_p);
     void modify(int x, int y);
     bool isValidSnake();
