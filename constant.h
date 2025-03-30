@@ -8,7 +8,7 @@ const int SCREEN_WIDTH = 960;
 const int SCREEN_HEIGHT = 640;
 const int CELL_SIZE = 40;
 const int BOARD_SIZE = 16;
-const double TIME_BIG_FOOD = 5000;
+const double TIME_BIG_FOOD = 3000;
 const int M = 5;
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
@@ -21,6 +21,4 @@ const SDL_Color Green = {0, 128, 0};
 
 
 
-
-
-#endif
+#endif _CONSTANT__H

@@ -9,6 +9,7 @@
 SDL_Surface* score_back_ground;
 
 void Snake::init(){
+    // init the snake has 3 block: 1 head, 1 body and 1 tail at the middle of the board game
     score = 0;
     snake.clear();
     Block head;
@@ -122,7 +123,6 @@ int Snake::move(int &id) { // Takes the event as an argument
     }
     if (big_food.getBigFood().is_appear && new_head.rect.x >= big_food.rect.x && new_head.rect.x <= big_food.rect.x + 1 && new_head.rect.y >= big_food.rect.y && new_head.rect.y <= big_food.rect.y + 1){
         have_eat_big_food = true;
-        cout << "Big food has been eaten\n";
     }
     snake1.push_front(new_head);
     SDL_Rect rect = head.rect;
@@ -163,7 +163,8 @@ int Snake::move(int &id) { // Takes the event as an argument
         food.getFood().count = 0;
         length ++;
         score += 5;
-        sound.playEatAppleSound();
+        Mix_Chunk *crunch_sound = Mix_LoadWAV("sound/crunch.wav");
+        Mix_PlayChannel(-1, crunch_sound, 0);
     }
     if (have_eat_food){
         food.genFood(snake);
@@ -171,8 +172,10 @@ int Snake::move(int &id) { // Takes the event as an argument
         food.getFood().count %= M;
         length ++;
         score ++;
-        sound.playEatAppleSound();
+        Mix_Chunk *crunch_sound = Mix_LoadWAV("sound/crunch.wav");
+        Mix_PlayChannel(-1, crunch_sound, 0);
     }
+
     if (!isValidSnake()){
         cout << "Snake eat itself\n";
         is_alive = false;
@@ -311,3 +314,4 @@ bool Snake::isValidSnake(){
     }
     return true;
 }
+

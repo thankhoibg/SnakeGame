@@ -21,11 +21,12 @@ struct Menu{
 };
 
 struct MainMenu{
-    Button play_game, quit, view_high_score;
+    Button play_game, quit, view_high_score, change_back_ground_music;
     int mouse_x, mouse_y;
     bool is_clicked, is_quited, is_paused = false;
     void init();
     void draw(int &id);
+    void draw(int &id, int &cnt);
     void loadBackGround(string file_path);
     void wait();
 };

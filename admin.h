@@ -15,6 +15,7 @@ struct Admin{
     // 2: pause screen
     // 3: game over screen
     // 4: high score screen
+    // 5: change background music
     // -2: continue playing normal mod
     void init(){
         id = 0;
@@ -41,55 +42,86 @@ struct Admin{
         HighScore high_score;
         high_score.init();
         high_score.update(-1);
-        Sound sound;
-        sound.init();
-        normal_mod.snake.sound = sound;
-        normal_mod.store_snake.sound = sound;
+        Sound back_ground_music;
+        string tmp;
+        Mix_Music *music;
+        Mix_Chunk *fail_sound = Mix_LoadWAV("sound/fail.wav");
         while(!main_menu.quit.is_clicked){
         //    cout << id << '\n';
             switch (id){
-                case 0:
-                    main_menu.draw(id);
+                case 0:{
+                    main_menu.draw(id, back_ground_music.cnt);
                     show();
                     main_menu.wait();
                     break;
-                case 1:
+                }
+                case 1:{
                     // playing normal mod
+                    back_ground_music.cnt %= back_ground_music.music_list.size();
+                    tmp = "sound/" + back_ground_music.music_list[back_ground_music.cnt];
+                    cout << back_ground_music.cnt << '\n';
+                    music = Mix_LoadMUS(tmp.c_str());
+                    Mix_PlayMusic(music, -1);
                     normal_mod.store_snake.init();
                     score = normal_mod.wait(id);
+                    Mix_FadeOutMusic(50);
+                    Mix_FreeMusic(music);
                     game_over.init(score);
                     high_score.update(score);
                     break;
-                case -2:
+                }
+                case -2:{
                     // continue playing normal mod
+                    back_ground_music.cnt %= back_ground_music.music_list.size();
+                    tmp = "sound/" + back_ground_music.music_list[back_ground_music.cnt];
+                    cout << back_ground_music.cnt << '\n';
+                    music = Mix_LoadMUS(tmp.c_str());
+                    Mix_PlayMusic(music, -1);
                     score = normal_mod.wait(id);
+                    Mix_FadeOutMusic(50);
+                    Mix_FreeMusic(music);
                     game_over.init(score);
                     high_score.update(score);
                     break;
-                case 2:
+                }
+                case 2:{
                     pause_screen.draw(id);
                     show();
                     pause_screen.wait();
                     // pause screen
                     break;
-                case 3:
+                }
+                case 3:{
+                    Mix_PlayChannel(-1, fail_sound, 0);
                     game_over.draw(id);
                     show();
                     game_over.wait();
                     // game over screen
                     break;
-                case 4:
+                }
+                case 4:{
                     high_score.draw(id);
                     show();
                     high_score.wait();
                     // high score screen
                     break;
-                default:
+                }
+                case 5:{
+                    back_ground_music.cnt ++;
+                    cout << back_ground_music.cnt << '\n';
+                    back_ground_music.cnt %= back_ground_music.music_list.size();
+                    break;
+                }
+                default:{
                     cout << "Invalid id\n";
                     break;
+                }
             }
             SDL_Delay(50);
         }
+
+
+//        Mix_FreeChunk(crunch_sound);
     }
 };
 

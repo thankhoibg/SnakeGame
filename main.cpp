@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <random>
 #include <time.h>
+#include <SDL_mixer.h>
 
 #include "constant.h"
 #include "map.h"
@@ -105,9 +106,6 @@ int main(int argc, char* argv[]){
     srand(time(0));
     initSDL();
     initIMG();
-
-    Mix_Chunk *gJump = loadSound("assets\\jump.wav");
-    play(gJump);
 
     useAdmin();
 

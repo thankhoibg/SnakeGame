@@ -93,7 +93,7 @@ void MainMenu::init(){
 
     quit.setValue("Quit");
     quit.setFont("Arial.ttf", 20);
-    quit.setRect(100, 335, 150, 100);
+    quit.setRect(100, 450, 150, 100);
     quit.color = White;
     quit.is_clicked = false;
 
@@ -102,6 +102,12 @@ void MainMenu::init(){
     view_high_score.setRect(100, 215, 300, 100);
     view_high_score.color = Ocean_Blue;
     view_high_score.is_clicked = false;
+
+    change_back_ground_music.setValue("Change game music");
+    change_back_ground_music.setFont("Arial.ttf", 20);
+    change_back_ground_music.setRect(100, 335, 600, 100);
+    change_back_ground_music.color = Ocean_Blue;
+    change_back_ground_music.is_clicked = false;
 }
 
 void MainMenu::draw(int &id){
@@ -133,6 +139,56 @@ void MainMenu::draw(int &id){
        }
    }
    else view_high_score.draw(White, Black);
+   if (change_back_ground_music.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) change_back_ground_music.draw(Red, Black);
+       else {
+            change_back_ground_music.is_clicked = true;
+            id = 0;
+            cout << "Change background music\n";
+       }
+   }
+   else change_back_ground_music.draw(White, Black);
+}
+
+void MainMenu::draw(int &id, int &cnt){
+   loadBackGround("img/MenuBackground.jpg");
+   if (play_game.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) play_game.draw(Red, Black);
+       else {
+           play_game.is_clicked = true;
+           id = 1;
+           cout << "Game started\n";
+       }
+   }
+   else play_game.draw(White, Black);
+   if (quit.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) quit.draw(Red, Black);
+       else {
+           quit.is_clicked = true;
+           id = -1;
+           cout << "Game quited\n";
+       }
+   }
+   else quit.draw(White, Black);
+   if (view_high_score.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) view_high_score.draw(Red, Black);
+       else {
+           view_high_score.is_clicked = true;
+           id = 4;
+           cout << "View high score screen\n";
+       }
+   }
+   else view_high_score.draw(White, Black);
+   if (change_back_ground_music.isFocused(mouse_x, mouse_y)) {
+       if (!is_clicked) change_back_ground_music.draw(Red, Black);
+       else {
+            change_back_ground_music.is_clicked = true;
+            id = 0;
+            cnt ++;
+            cout << "Change background music\n";
+       }
+   }
+   else change_back_ground_music.draw(White, Black);
 }
 
 void MainMenu::loadBackGround(string file_path){
@@ -165,6 +221,11 @@ void MainMenu::wait(){
             }
             else if (event.type == SDL_MOUSEBUTTONDOWN){
                 is_clicked = true;
+            }
+            else if (event.type == SDL_QUIT){
+                freeIMG();
+                quitSDL();
+                exit(0);
             }
         }
 
