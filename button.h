@@ -38,6 +38,7 @@ struct Button{
         TTF_CloseFont(font);
     }
     SDL_Texture* loadTextureFromPath(string file_path);
+    SDL_Texture* loadTextureFromPath(string file_path, SDL_Rect rect);
     void draw(){
       SDL_Surface* textSurface = TTF_RenderText_Solid(font, value.c_str(), color);
       SDL_Texture* gTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);

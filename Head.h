@@ -352,7 +352,7 @@ struct Body{
                             case 1:
                                 cout << "Opposite dir1\n";
                                 cout << dir << ' ' << other.dir << '\n';
-                                exit(0);
+                                // exit(0);
                                 break;
                             case 2:
                                 dir1 = 1;
@@ -373,7 +373,7 @@ struct Body{
                             case 0:
                                 cout << "Opposite dir1\n";
                                 cout << dir << ' ' << other.dir << '\n';
-                                exit(0);
+                                // exit(0);
                                 break;
                             case 1:
                                 cout << "Body straight\n";
@@ -410,7 +410,7 @@ struct Body{
                             case 3:
                                 cout << "Opposite dir1\n";
                                 cout << dir << ' ' << other.dir << '\n';
-                                exit(0);
+                                // exit(0);
                                 break;
                             default:
                                 cout << "Error dir\n";
@@ -431,7 +431,7 @@ struct Body{
                             case 2:
                                 cout << "Opposite dir1\n";
                                 cout << dir << ' ' << other.dir << '\n';
-                                exit(0);
+                                // exit(0);
                                 break;
                             case 3:
                                 cout << "Body straight\n";

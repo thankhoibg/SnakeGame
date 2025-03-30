@@ -4,12 +4,14 @@
 #include <iostream>
 #include <ctime>
 #include "Head.h"
+#include "button.h"
 struct Snake{
     int dir, dem = 0, length = 3, score = 0;
     bool is_alive = true;
     deque<Block> snake;
     Block food, big_food;
     clock_t start_time;
+    Button score_board;
     void init();
     void draw();
     int move(int &id); // return score

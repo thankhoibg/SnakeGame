@@ -42,6 +42,8 @@ void initIMG(){
     body_topright      = IMG_Load("img/body_topright.png");
     body_bottomright      = IMG_Load("img/body_bottomright.png");
 
+    // score_back_ground = IMG_Load("img/ScoreBackGround.jpg");
+
     apple = IMG_Load("img/apple.png");
 
 }
@@ -62,6 +64,8 @@ void freeIMG(){
     SDL_FreeSurface(body_bottomleft);
     SDL_FreeSurface(body_topright);
     SDL_FreeSurface(body_bottomright);
+
+    // SDL_FreeSurface(score_back_ground);
 
     SDL_FreeSurface(apple);
 }

@@ -77,17 +77,21 @@
 1743017566 source:f:\fighting for learning\game maker\snakegame\map.cpp
 	"map.h"
 
-1743278521 source:f:\fighting for learning\game maker\snakegame\snake.cpp
+1743308317 source:f:\fighting for learning\game maker\snakegame\snake.cpp
 	"snake.h"
 	"constant.h"
 	"graphics.h"
 	<ctime>
+	<SDL.h>
+	<SDL_image.h>
+	"button.h"
 
-1743278254 f:\fighting for learning\game maker\snakegame\snake.h
+1743304884 f:\fighting for learning\game maker\snakegame\snake.h
 	<deque>
 	<iostream>
 	<ctime>
 	"Head.h"
+	"button.h"
 
 1743013398 source:f:\fighting for learning\game maker\snakegame\main1.cpp
 
@@ -101,20 +105,20 @@
 	<SDL.h>
 	"constant.h"
 
-1743262122 f:\fighting for learning\game maker\snakegame\head.h
+1743306296 f:\fighting for learning\game maker\snakegame\head.h
 	<SDL.h>
 	"constant.h"
 	<iostream>
 	<random>
 	<deque>
 
-1743180575 source:f:\fighting for learning\game maker\snakegame\head.cpp
+1743308126 source:f:\fighting for learning\game maker\snakegame\head.cpp
 	"Head.h"
 	"constant.h"
 	<iostream>
 	<SDL.h>
 
-1743278597 source:f:\fighting for learning\game maker\snakegame\menu.cpp
+1743278828 source:f:\fighting for learning\game maker\snakegame\menu.cpp
 	"menu.h"
 	"constant.h"
 	<cstring>
@@ -127,7 +131,7 @@
 	"snake.h"
 	"map.h"
 
-1743269420 f:\fighting for learning\game maker\snakegame\button.h
+1743305271 f:\fighting for learning\game maker\snakegame\button.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -135,7 +139,7 @@
 	<iostream>
 	"constant.h"
 
-1743278757 f:\fighting for learning\game maker\snakegame\admin.h
+1743308534 f:\fighting for learning\game maker\snakegame\admin.h
 	<iostream>
 	"menu.h"
 	"graphics.h"

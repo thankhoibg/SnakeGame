@@ -2,6 +2,11 @@
 #include "constant.h"
 #include "graphics.h"
 #include <ctime>
+#include <SDL.h>
+#include <SDL_image.h>
+#include "button.h"
+
+SDL_Surface* score_back_ground;
 
 void Snake::init(){
     score = 0;
@@ -28,6 +33,16 @@ void Snake::init(){
     big_food.setBigFood();
     big_food.getBigFood().is_appear = false;
 
+    // score board will load the image in the rect{640, 0, 320, 640} at first
+    // score board will load the apple image at the middle of the rect{640, 0, 320, 640}
+    // score board will load the score text right after the score text
+    score_board.setValue(to_string(score));
+    score_board.setFont("segoesc.ttf", 50);
+    score_board.setRect(700, 40, 50, 70);
+    score_board.color = Black;
+    score_board.draw(Black, Red);
+    score_back_ground = IMG_Load("img/ScoreBackGround.jpg");
+
     clock_t start_time = clock();
 }
 
@@ -53,6 +68,21 @@ void Snake::draw(){
     }
 //    cout << timee - big_food.getBigFood().time_appear << '\n';
     if (big_food.getBigFood().is_appear) big_food.draw();
+
+//     score board will load the image in the rect{640, 0, 960, 640} at first
+//     score board will load the apple image at the rect{700, 220, 100, 100}
+//     score board will load the score text right after the score text
+//     the rect of the score text will be {800, 220, 50, 50}
+    score_board.setValue(to_string(score));
+    SDL_Texture* gTexture = SDL_CreateTextureFromSurface(gRenderer, score_back_ground);
+    SDL_Rect my_rect = {640, 0, 320, 640};
+    SDL_RenderCopy(gRenderer, gTexture, NULL, &my_rect);
+
+    score_board.draw(Red, White);
+
+    SDL_DestroyTexture(gTexture);
+
+    // score_board.setRect()
     if (!is_alive){
         // freeIMG();
         // quitSDL();

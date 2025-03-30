@@ -36,6 +36,8 @@
 		<Unit filename="Block.h" />
 		<Unit filename="Head.cpp" />
 		<Unit filename="Head.h" />
+		<Unit filename="admin.h" />
+		<Unit filename="button.h" />
 		<Unit filename="constant.cpp" />
 		<Unit filename="constant.h" />
 		<Unit filename="graphics.cpp" />
@@ -43,6 +45,8 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="map.cpp" />
 		<Unit filename="map.h" />
+		<Unit filename="menu.cpp" />
+		<Unit filename="menu.h" />
 		<Unit filename="snake.cpp" />
 		<Unit filename="snake.h" />
 		<Extensions>

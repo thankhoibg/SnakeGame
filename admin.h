@@ -28,7 +28,7 @@ struct Admin{
         int score;
         GameOverScreen game_over;
         while(!main_menu.quit.is_clicked){
-            cout << id << '\n';
+//            cout << id << '\n';
             switch (id){
                 case 0:
                     main_menu.draw(id);
