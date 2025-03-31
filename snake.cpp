@@ -34,12 +34,14 @@ void Snake::init(){
     food.genFood(snake);
     big_food.setBigFood();
     big_food.getBigFood().is_appear = false;
+    small_food.setSmallFood();
+    small_food.getSmallFood().is_appear = false;
 
     // score board will load the image in the rect{640, 0, 320, 640} at first
     // score board will load the apple image at the middle of the rect{640, 0, 320, 640}
     // score board will load the score text right after the score text
     score_board.setValue(to_string(score));
-    score_board.setFont("segoesc.ttf", 50);
+    score_board.setFont("font\\segoesc.ttf", 50);
     score_board.setRect(700, 40, 50, 70);
     score_board.color = Black;
     score_board.draw(Black, Red);
@@ -62,14 +64,30 @@ void Snake::draw(){
 //        cout << "Big food has been spawned and food.count is reseted\n";
         food.getFood().count = 0;
     }
+    if (food.getFood().count % N == N - 1 && small_food.getSmallFood().is_appear == false && snake.size() > 3) {
+        small_food.getSmallFood().is_appear = true;
+        clock_t now = clock();
+        small_food.getSmallFood().time_appear = now - start_time;
+//        cout << big_food.getBigFood().time_appear << '\n';
+        small_food.genFood(snake, 2);
+//        cout << "Big food has been spawned and food.count is reseted\n";
+    }
     clock_t now = clock();
     double timee = now - start_time;
     if (timee - big_food.getBigFood().time_appear > TIME_BIG_FOOD) {
         big_food.getBigFood().is_appear = false;
         // big food disappear beacause over TIME_BIG_FOOD ms, the snake does not eat big food.
     }
+    if (timee - small_food.getSmallFood().time_appear > TIME_SMALL_FOOD) {
+        small_food.getSmallFood().is_appear = false;
+        // big food disappear beacause over TIME_BIG_FOOD ms, the snake does not eat big food.
+    }
 //    cout << timee - big_food.getBigFood().time_appear << '\n';
     if (big_food.getBigFood().is_appear) big_food.draw();
+    if (small_food.getSmallFood().is_appear) {
+        // cout << "dang ve small food\n";
+        small_food.draw();
+    }
 
 //     score board will load the image in the rect{640, 0, 960, 640} at first
 //     score board will load the apple image at the rect{700, 220, 100, 100}
@@ -118,9 +136,12 @@ int Snake::move(int &id) { // Takes the event as an argument
             break;
     }
     new_head.modify();
-    bool have_eat_food = false, have_eat_big_food = false;
+    bool have_eat_food = false, have_eat_big_food = false, have_eat_small_food = false;
     if (new_head.rect.x == food.rect.x && new_head.rect.y == food.rect.y){
         have_eat_food = true;
+    }
+    if (new_head.rect.x == small_food.rect.x && new_head.rect.y == small_food.rect.y){
+        have_eat_small_food = true;
     }
     if (big_food.getBigFood().is_appear && new_head.rect.x >= big_food.rect.x && new_head.rect.x <= big_food.rect.x + 1 && new_head.rect.y >= big_food.rect.y && new_head.rect.y <= big_food.rect.y + 1){
         have_eat_big_food = true;
@@ -157,6 +178,18 @@ int Snake::move(int &id) { // Takes the event as an argument
         Block tail = snake.front(); snake.pop_front();
         tail.getTail().getNextDir(snake1.back().getBody());
         snake1.push_back(tail);
+    }
+    if (have_eat_small_food) {
+        small_food.getSmallFood().is_appear = false;
+        score ++;
+        food.getFood().count ++;
+        food.getFood().count %= M;
+        snake1.pop_back();
+        int tmp_dir = snake1.back().getBody().dir;
+        snake1.back().setTail();
+        snake1.back().getTail().dir = tmp_dir;
+        Mix_Chunk *crunch_sound = Mix_LoadWAV("sound/crunch.wav");
+        Mix_PlayChannel(-1, crunch_sound, 0);
     }
     snake = snake1;
     if (have_eat_big_food){
@@ -211,9 +244,12 @@ int Snake::move(int &id, int &id1) { // Takes the event as an argument
             break;
     }
     new_head.modify();
-    bool have_eat_food = false, have_eat_big_food = false;
+    bool have_eat_food = false, have_eat_big_food = false, have_eat_small_food = false;
     if (new_head.rect.x == food.rect.x && new_head.rect.y == food.rect.y){
         have_eat_food = true;
+    }
+    if (new_head.rect.x == small_food.rect.x && new_head.rect.y == small_food.rect.y){
+        have_eat_small_food = true;
     }
     if (big_food.getBigFood().is_appear && new_head.rect.x >= big_food.rect.x && new_head.rect.x <= big_food.rect.x + 1 && new_head.rect.y >= big_food.rect.y && new_head.rect.y <= big_food.rect.y + 1){
         have_eat_big_food = true;
@@ -251,6 +287,18 @@ int Snake::move(int &id, int &id1) { // Takes the event as an argument
         tail.getTail().getNextDir(snake1.back().getBody());
         snake1.push_back(tail);
     }
+    if (have_eat_small_food) {
+        small_food.getSmallFood().is_appear = false;
+        score ++;
+        food.getFood().count ++;
+        food.getFood().count %= M;
+        snake1.pop_back();
+        int tmp_dir = snake1.back().getBody().dir;
+        snake1.back().setTail();
+        snake1.back().getTail().dir = tmp_dir;
+        Mix_Chunk *crunch_sound = Mix_LoadWAV("sound/crunch.wav");
+        Mix_PlayChannel(-1, crunch_sound, 0);
+    }
     snake = snake1;
     if (have_eat_big_food){
         big_food.getBigFood().is_appear = false;
@@ -270,6 +318,7 @@ int Snake::move(int &id, int &id1) { // Takes the event as an argument
         Mix_PlayChannel(-1, crunch_sound, 0);
     }
 
+    
     if (!isValidSnake()){
         cout << "Snake eat itself\n";
         is_alive = false;
@@ -278,6 +327,100 @@ int Snake::move(int &id, int &id1) { // Takes the event as an argument
         return score;
     }
 }
+
+// int Snake::move(int &id, int &id1) { // Takes the event as an argument
+//     dem ++;
+//     if (dem == 1) return 0;
+//     deque<Block> snake1;
+//     Block head = snake.front(); snake.pop_front();
+//     Block new_head = head;
+//     new_head.getHead().dir = dir;
+//     switch (dir){
+//         case 0:
+//             new_head.rect.y --;
+//             break;
+//         case 1:
+//             new_head.rect.y ++;
+//             break;
+//         case 2:
+//             new_head.rect.x --;
+//             break;
+//         case 3:
+//             new_head.rect.x ++;
+//             break;
+//         default:
+//             cout << "Error dir of snake when it is moving\n";
+//             exit(0);
+//             break;
+//     }
+//     new_head.modify();
+//     bool have_eat_food = false, have_eat_big_food = false;
+//     if (new_head.rect.x == food.rect.x && new_head.rect.y == food.rect.y){
+//         have_eat_food = true;
+//     }
+//     if (big_food.getBigFood().is_appear && new_head.rect.x >= big_food.rect.x && new_head.rect.x <= big_food.rect.x + 1 && new_head.rect.y >= big_food.rect.y && new_head.rect.y <= big_food.rect.y + 1){
+//         have_eat_big_food = true;
+//     }
+//     snake1.push_front(new_head);
+//     SDL_Rect rect = head.rect;
+//     Block last = head;
+//     while(snake.size() > 1) {
+//         Block body = snake.front(); Block tmp = body;
+//         snake.pop_front();
+//         SDL_Rect rect1 = body.rect;
+//         body.rect = rect;
+//         rect = rect1;
+//         if (snake1.back().getType() == Block::Type::Head) body.getBody().getNextDir(snake1.back().getHead());
+//         else {
+//             body = last;
+//         }
+//         snake1.push_back(body);
+//         last = tmp;
+//     }
+//     if (!have_eat_food && !have_eat_big_food){
+//         Block tail = snake.front(); snake.pop_front();
+//         tail.getTail().getNextDir(snake1.back().getBody());
+//         tail.rect = rect;
+//         snake1.push_back(tail);
+//         length ++;
+//     }
+//     else {
+//         Block add_body = snake1[1];
+//         add_body.rect = last.rect;
+//         add_body.getBody().is_straight = true;
+//         add_body.getBody().dir = snake.front().getTail().dir;
+//         snake1.push_back(add_body);
+//         Block tail = snake.front(); snake.pop_front();
+//         tail.getTail().getNextDir(snake1.back().getBody());
+//         snake1.push_back(tail);
+//     }
+//     snake = snake1;
+//     if (have_eat_big_food){
+//         big_food.getBigFood().is_appear = false;
+//         food.getFood().count = 0;
+//         length ++;
+//         score += 5;
+//         Mix_Chunk *crunch_sound = Mix_LoadWAV("sound/crunch.wav");
+//         Mix_PlayChannel(-1, crunch_sound, 0);
+//     }
+//     if (have_eat_food){
+//         food.genFood(snake);
+//         food.getFood().count ++;
+//         food.getFood().count %= M;
+//         length ++;
+//         score ++;
+//         Mix_Chunk *crunch_sound = Mix_LoadWAV("sound/crunch.wav");
+//         Mix_PlayChannel(-1, crunch_sound, 0);
+//     }
+
+//     if (!isValidSnake()){
+//         cout << "Snake eat itself\n";
+//         is_alive = false;
+//         id = 3;
+//         id1 = 1;
+//         return score;
+//     }
+// }
 
 
 

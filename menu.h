@@ -38,6 +38,7 @@ struct NormalMod{
     Snake snake, store_snake;
     Map map;
     void init();
+    int wait(int &id, int &id1, int &id2);
     int wait(int &id, int &id1);
     int wait(int &id);
     bool run();
@@ -49,6 +50,7 @@ struct AIMod{
     AI snake, store_snake;
     Map map;
     void init();
+    int wait(int &id, int &id1, int &id2);
     int wait(int &id, int &id1);
     int wait(int &id);
     bool run();

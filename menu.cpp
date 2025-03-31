@@ -7,13 +7,13 @@ using namespace std;
 
 void Menu::init(){
     play_game.setValue("Play game");
-    play_game.setFont("Arial.ttf", 20);
+    play_game.setFont("font\\Arial.ttf", 20);
     play_game.setRect(100, 100, 300, 200);
     play_game.color = White;
     play_game.is_clicked = false;
 
     quit.setValue("Quit");
-    quit.setFont("Arial.ttf", 20);
+    quit.setFont("font\\Arial.ttf", 20);
     quit.setRect(100, 335, 150, 200);
     quit.color = White;
     quit.is_clicked = false;
@@ -86,31 +86,31 @@ void Menu::wait(){
 
 void MainMenu::init(){
     play_game.setValue("Play game");
-    play_game.setFont("Arial.ttf", 20);
+    play_game.setFont("font\\Arial.ttf", 20);
     play_game.setRect(100, 100, 300, 100);
     play_game.color = White;
     play_game.is_clicked = false;
 
     quit.setValue("Quit");
-    quit.setFont("Arial.ttf", 20);
+    quit.setFont("font\\Arial.ttf", 20);
     quit.setRect(100, 450, 150, 100);
     quit.color = White;
     quit.is_clicked = false;
 
     view_high_score.setValue("High Score");
-    view_high_score.setFont("Arial.ttf", 20);
+    view_high_score.setFont("font\\Arial.ttf", 20);
     view_high_score.setRect(100, 215, 300, 100);
     view_high_score.color = Ocean_Blue;
     view_high_score.is_clicked = false;
 
     change_back_ground_music.setValue("Change game music");
-    change_back_ground_music.setFont("Arial.ttf", 20);
+    change_back_ground_music.setFont("font\\Arial.ttf", 20);
     change_back_ground_music.setRect(100, 335, 600, 100);
     change_back_ground_music.color = Ocean_Blue;
     change_back_ground_music.is_clicked = false;
 
     ai_mode.setValue("Play AI Mode");
-    ai_mode.setFont("Arial.ttf", 20);
+    ai_mode.setFont("font\\Arial.ttf", 20);
     ai_mode.setRect(640, 100, 600, 100);
     ai_mode.color = Ocean_Blue;
     ai_mode.is_clicked = false;
@@ -318,6 +318,55 @@ int NormalMod::wait(int &id, int &id1){
     return score;
 }
 
+int NormalMod::wait(int &id, int &id1, int &id3){
+    id1 = 1;
+    // cout << "Has entered\n";
+    snake = store_snake;
+    // while(true){
+    //     map.drawBoard();
+    //     snake.draw();
+    //     snake.getDir();
+    //     snake.move();
+    //     show();
+    //     SDL_Delay(80);
+    // }
+
+
+    SDL_Event event;
+    bool quit = false;
+    int score = 0;
+
+    while (!quit) {
+        SDL_Event event;
+        bool pKeyPressed = false;
+
+        if (!snake.is_alive) {
+            id = 3;
+            store_snake.init();
+            return score;
+        }
+        map.drawBoard();
+        snake.draw();
+        snake.getDir(pKeyPressed);
+        score = snake.move(id);
+        show();
+
+        if (pKeyPressed) {
+            quit = true;
+            cout << "Player has paused the game\n";
+            id = 2;
+            id1 = -2;
+            id3 = 1;
+            store_snake = snake;
+        }
+
+        SDL_Delay(80);
+
+    }
+
+    return score;
+}
+
 int NormalMod::wait(int &id){
     // cout << "Has entered\n";
     snake = store_snake;
@@ -393,7 +442,6 @@ int AIMod::wait(int &id, int &id1){
 
         map.drawBoard();
         snake.draw();
-        cout << "We are here\n";
         if (dir_stored.empty())
             snake.getDir(pKeyPressed, dir_stored);
         int x = snake.snake.front().rect.x, y = snake.snake.front().rect.y;
@@ -409,6 +457,56 @@ int AIMod::wait(int &id, int &id1){
             cout << "Player has paused the game\n";
             id = 2;
             id1 = -3;
+            store_snake = snake;
+        }
+
+        SDL_Delay(80);
+
+    }
+
+    return score;
+}
+
+int AIMod::wait(int &id, int &id1, int &id2){
+    id1 = 6;
+    snake = store_snake;
+
+    SDL_Event event;
+    bool quit = false;
+    int score = 0;
+
+    vector<int> dir_stored;
+    dir_stored.clear();
+
+    while (!quit) {
+        SDL_Event event;
+        bool pKeyPressed = false;
+
+        if (!snake.is_alive) {
+            id = 3;
+            store_snake.init();
+            return score;
+        }
+
+
+        map.drawBoard();
+        snake.draw();
+        if (dir_stored.empty())
+            snake.getDir(pKeyPressed, dir_stored);
+        int x = snake.snake.front().rect.x, y = snake.snake.front().rect.y;
+        snake.dir = dir_stored[0];
+        score = snake.move(id, id1);
+        if (snake.snake.front().rect.x != x || snake.snake.front().rect.y != y) {
+            dir_stored.erase(dir_stored.begin());
+        }
+        show();
+
+        if (pKeyPressed) {
+            quit = true;
+            cout << "Player has paused the game\n";
+            id = 2;
+            id1 = -3;
+            id2 = 6;
             store_snake = snake;
         }
 
@@ -468,19 +566,19 @@ int AIMod::wait(int &id){
 void PauseScreen::init(){
     is_clicked = is_quited = is_paused = false;
     continue_play.setValue("Continue Play?");
-    continue_play.setFont("segoesc.ttf", 10);
+    continue_play.setFont("font\\segoesc.ttf", 10);
     continue_play.setRect(100, 150, 300, 100);
     continue_play.color = Ocean_Blue;
     continue_play.is_clicked = false;
 
     quit.setValue("Quit");
-    quit.setFont("segoesc.ttf", 20);
+    quit.setFont("font\\segoesc.ttf", 20);
     quit.setRect(100, 280, 100, 100);
     quit.color = Ocean_Blue;
     quit.is_clicked = false;
 
     play_again.setValue("Play Again");
-    play_again.setFont("segoesc.ttf", 20);
+    play_again.setFont("font\\segoesc.ttf", 20);
     play_again.setRect(100, 400, 280, 100);
     play_again.color = Ocean_Blue;
     play_again.is_clicked = false;
@@ -547,8 +645,44 @@ void PauseScreen::draw(int &id, int id1){
         if (!is_clicked) play_again.draw(Yellow, Black);
         else {
             play_again.is_clicked = true;
-            id = 1;
+            id = id1;
             cout << "Play again\n";
+        }
+    }
+    else play_again.draw(White, Black);
+}
+
+void PauseScreen::draw(int &id, int id1, int id2){
+    loadMiniBackGround("img/PauseBackground.jpg", {0, 0, 640, 640});
+    if (continue_play.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) continue_play.draw(Ocean_Blue, Black);
+        else {
+            continue_play.is_clicked = true;
+            id = id1;
+            if (id1 != -2 && id1 != -3){
+                cout << "Unidentify id1\n";
+                exit(0);
+            }
+            cout << "Game continued\n";
+        }
+    }
+    else continue_play.draw(White, Black);
+    if (quit.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) quit.draw(Red, Black);
+        else {
+            quit.is_clicked = true;
+            id = 0;
+            cout << "Return main menu\n";
+        }
+    }
+    else quit.draw(White, Black);
+    if (play_again.isFocused(mouse_x, mouse_y)) {
+        if (!is_clicked) play_again.draw(Yellow, Black);
+        else {
+            play_again.is_clicked = true;
+            id = id2;
+            cout << "Play again\n";
+            cout << "The id now is " << id2 << '\n';
         }
     }
     else play_again.draw(White, Black);
@@ -598,19 +732,19 @@ void GameOverScreen::init(int score){
     is_clicked = is_quited = false;
 
     quit.setValue("Quit");
-    quit.setFont("segoesc.ttf", 20);
+    quit.setFont("font\\segoesc.ttf", 20);
     quit.setRect(100, 280, 100, 100);
     quit.color = Ocean_Blue;
     quit.is_clicked = false;
 
     play_again.setValue("Play Again");
-    play_again.setFont("segoesc.ttf", 20);
+    play_again.setFont("font\\segoesc.ttf", 20);
     play_again.setRect(100, 400, 280, 100);
     play_again.color = Ocean_Blue;
     play_again.is_clicked = false;
 
     present_score.setValue("Your score is " + to_string(score));
-    present_score.setFont("segoesc.ttf", 20);
+    present_score.setFont("font\\segoesc.ttf", 20);
     present_score.setRect(100, 150, 300, 100);
     present_score.color = Ocean_Blue;
     present_score.is_clicked = false;
@@ -722,14 +856,14 @@ void GameOverScreen::draw(int &id, int id1){
 void HighScore::init(){
     is_clicked = is_quited = false;
     high_score.setValue("");
-    high_score.setFont("segoesc.ttf", 20);
+    high_score.setFont("font\\segoesc.ttf", 20);
     high_score.setRect(480, 220, 50, 80);
     high_score.color = Ocean_Blue;
     high_score.is_clicked = false;
     score_highest_stored_path = "HighestScore.txt";
 
     quit.setValue("Quit");
-    quit.setFont("segoesc.ttf", 20);
+    quit.setFont("font\\segoesc.ttf", 20);
     quit.setRect(430, 335, 150, 100);
     quit.color = White;
     quit.is_clicked = false;

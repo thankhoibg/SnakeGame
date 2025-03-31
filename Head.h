@@ -486,13 +486,18 @@ struct BigFood{
     double time_appear = 0.0;
 };
 
+struct SmallFood{
+    bool is_appear = false;
+    double time_appear = 0.0;
+};
+
 struct Wall{
     bool is_odd = 0;
 };
 
 class Block {
 public:
-    enum class Type { Head, Body, Tail, Wall, Food, BigFood, Empty };
+    enum class Type { Head, Body, Tail, Wall, Food, BigFood, SmallFood, Empty };
     SDL_Rect rect = {0, 0, CELL_SIZE, CELL_SIZE};
     void getPos(int x, int y){
         rect.x = x;
@@ -507,6 +512,7 @@ private:
         Tail tail;
         Food food;
         BigFood big_food;
+        SmallFood small_food;
     };
 
 public:
@@ -537,6 +543,11 @@ public:
         big_food = initialBigFood;
     }
 
+    // Constructor that initializes Food
+    Block(const SmallFood& initialSmallFood) : type(Type::SmallFood) {
+        small_food = initialSmallFood;
+    }
+
 
     Type getType() const { return type; }
 
@@ -554,6 +565,9 @@ public:
     }
     void setBigFood(){
         type = Type::BigFood; // Set the type of the block
+    }
+    void setSmallFood(){
+        type = Type::SmallFood; // Set the type of the block
     }
 
     Head& getHead() {
@@ -635,6 +649,21 @@ public:
         return big_food;
     }
 
+    SmallFood& getSmallFood() {
+        if (type != Type::SmallFood) {
+            std::cerr << "Error: Block is not a SmallFood!\n";
+            exit(1); // Or throw an exception
+        }
+        return small_food;
+    }
+    const SmallFood& getSmallFood() const {
+        if (type != Type::SmallFood) {
+            std::cerr << "Error: Block is not a SmallFood!\n";
+            exit(1); // Or throw an exception
+        }
+        return small_food;
+    }
+
 
     void modify(){
         if (rect.x < 0) rect.x = BOARD_SIZE-1;
@@ -644,7 +673,7 @@ public:
     }
 
     void genFood(deque<Block> snake, int typee = 0){
-        if (type != Type::Food && type != Type::BigFood){
+        if (type != Type::Food && type != Type::BigFood && type != Type::SmallFood){
             cout << "It's not a food 111\n";
             return;
         }
@@ -677,15 +706,15 @@ public:
             rect.x = x;
             rect.y = y;
         }
-        else {
+        else if (typee == 1){
             vector<vector<bool>> vec;
             vec.resize(BOARD_SIZE);
             for(auto &v : vec) v.resize(BOARD_SIZE, true);
             for(Block block : snake){
                 vec[block.rect.x][block.rect.y] = false;
-                if (block.rect.x + 1 < BOARD_SIZE) vec[block.rect.x+1][block.rect.y] = false;
-                if (block.rect.y + 1 < BOARD_SIZE) vec[block.rect.x][block.rect.y+1] = false;
-                if (block.rect.x + 1 < BOARD_SIZE && block.rect.y + 1 < BOARD_SIZE) vec[block.rect.x+1][block.rect.y+1] = false;
+                if (block.rect.x - 1 >= 0) vec[block.rect.x-1][block.rect.y] = false;
+                if (block.rect.y - 1 >= 0) vec[block.rect.x][block.rect.y-1] = false;
+                if (block.rect.x - 1 >= 0 && block.rect.y - 1 >= 0) vec[block.rect.x-1][block.rect.y-1] = false;
             }
             vector<pair<int, int>> valid_pos;
             for(int i = 0; i < BOARD_SIZE-1; ++ i) for(int j = 0; j < BOARD_SIZE-1; ++ j){
@@ -708,6 +737,25 @@ public:
 //             rect.x = x;
 //             rect.y = y;
         }
+        else {
+            // cout << typee << '\n';
+            vector<vector<bool>> vec;
+            vec.resize(BOARD_SIZE);
+            for(auto &v : vec) v.resize(BOARD_SIZE, true);
+            for(Block block : snake){
+                vec[block.rect.x][block.rect.y] = false;
+            }
+            vector<pair<int, int>> valid_pos;
+            for(int i = 0; i < BOARD_SIZE; ++ i) for(int j = 0; j < BOARD_SIZE; ++ j){
+                if (vec[i][j]) valid_pos.emplace_back(i, j);
+            }
+            int t = rand() % valid_pos.size();
+            x = valid_pos[t].first;
+            y = valid_pos[t].second;
+            rect.x = x;
+            rect.y = y;
+            // cout << "da goi lenh tao small food\n";
+        }
         rect.x = x;
         rect.y = y;
     }
@@ -720,6 +768,7 @@ public:
     }
     void drawFood();
     void drawBigFood();
+    void drawSmallFood();
 };
 
 #endif // _HEAD__H

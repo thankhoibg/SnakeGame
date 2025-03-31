@@ -23,6 +23,7 @@ SDL_Surface* body_topright;
 SDL_Surface* body_bottomright;
 
 SDL_Surface* apple;
+SDL_Surface* pill;
 
 void initIMG(){
     head_up = IMG_Load("img/head_up.png");
@@ -45,6 +46,20 @@ void initIMG(){
     // score_back_ground = IMG_Load("img/ScoreBackGround.jpg");
 
     apple = IMG_Load("img/apple.png");
+    pill = IMG_Load("img/pill.png");
+    // auto changeColor = [&](SDL_Surface* surface, Uint32 fromColor, Uint32 toColor) {
+    //     Uint32* pixels = (Uint32*)surface->pixels;
+    //     int pixelCount = surface->w * surface->h;
+    //     for (int i = 0; i < pixelCount; ++i) {
+    //         if (pixels[i] == fromColor) { // So sánh trực tiếp giá trị pixel
+    //             pixels[i] = toColor;
+    //         }
+    //     }
+    // };
+    // pill = apple;
+    // Uint32 redColor = SDL_MapRGB(apple->format, 255, 0, 0);   // Ví dụ: Đỏ thuần
+    // Uint32 tealColor = SDL_MapRGB(apple->format, 0, 128, 128); // Ví dụ: Xanh két
+    // changeColor(pill, redColor, tealColor);
 
 }
 void freeIMG(){
@@ -68,6 +83,7 @@ void freeIMG(){
     // SDL_FreeSurface(score_back_ground);
 
     SDL_FreeSurface(apple);
+    SDL_FreeSurface(pill);
 }
 
 void Block::draw(){
@@ -89,6 +105,9 @@ void Block::draw(){
             break;
         case Type::BigFood:
             drawBigFood();
+            break;
+        case Type::SmallFood:
+            drawSmallFood();
             break;
         default:
             cout << "Cann't regconize type of Block when draw\n";
@@ -177,6 +196,57 @@ void Block::drawFood(){
     SDL_Texture* gTexture;
 
     gTexture = SDL_CreateTextureFromSurface(gRenderer, apple);
+    SDL_Rect rect1;
+    rect1.x = rect.x * CELL_SIZE;
+    rect1.y = rect.y * CELL_SIZE;
+    rect1.w = CELL_SIZE;
+    rect1.h = CELL_SIZE;
+    static int count = 0;
+    count ++;
+    switch (count%5){
+        case 0:
+            rect1.x -= 1;
+            rect1.y -= 1;
+            rect1.w += 1;
+            rect1.h += 1;
+            break;
+        case 1:
+            rect1.x -= 2;
+            rect1.y -= 2;
+            rect1.w += 2;
+            rect1.h += 2;
+            break;
+        case 2:
+            rect1.x -= 3;
+            rect1.y -= 3;
+            rect1.w += 3;
+            rect1.h += 3;
+            break;
+        case 3:
+            rect1.x -= 4;
+            rect1.y -= 4;
+            rect1.w += 4;
+            rect1.h += 4;
+            break;
+        case 4:
+            rect1.x -= 5;
+            rect1.y -= 5;
+            rect1.h += 5;
+            rect1.w += 5;
+            break;
+        default:
+            break;
+    }
+    SDL_RenderCopy(gRenderer, gTexture, nullptr, &rect1);
+
+    SDL_DestroyTexture(gTexture);
+}
+
+void Block::drawSmallFood(){
+    SDL_Texture* gTexture;
+
+    gTexture = SDL_CreateTextureFromSurface(gRenderer, pill);
+    // cout << "Kiem tra xem pill " << (pill != NULL) << '\n';
     SDL_Rect rect1;
     rect1.x = rect.x * CELL_SIZE;
     rect1.y = rect.y * CELL_SIZE;

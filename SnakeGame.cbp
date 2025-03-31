@@ -37,6 +37,8 @@
 		<Unit filename="Head.cpp" />
 		<Unit filename="Head.h" />
 		<Unit filename="admin.h" />
+		<Unit filename="aisnake.cpp" />
+		<Unit filename="aisnake.h" />
 		<Unit filename="button.h" />
 		<Unit filename="constant.cpp" />
 		<Unit filename="constant.h" />

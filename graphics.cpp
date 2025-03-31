@@ -19,7 +19,7 @@ void initSDL(){
         return ;
     }
 
-    gWindow = SDL_CreateWindow("Caro Board", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    gWindow = SDL_CreateWindow("SnakeGame by Thankhoi98", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (gWindow == NULL) {
         cout << "Window could not be created! SDL_Error: " << SDL_GetError() << endl;
         return ;

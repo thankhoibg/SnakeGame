@@ -9,7 +9,7 @@
 using namespace std;
 
 struct Admin{
-    int id, id1;
+    int id, id1, id2;
     // 0: main menu
     // 1: playing normal mod
     // 2: pause screen
@@ -20,7 +20,7 @@ struct Admin{
     // -2: continue playing normal mod
     // -3: continue playing ai mod
     void init(){
-        id = id1 = 0;
+        id = id1 = id2 = 0;
     }
 
 //    void run1(){
@@ -126,7 +126,7 @@ struct Admin{
 
         // exit(0);
 
-        id = 0;
+        id = id1 = 0;
         MainMenu main_menu;
         main_menu.init();
         NormalMod normal_mod;
@@ -145,7 +145,7 @@ struct Admin{
         Mix_Music *music;
         Mix_Chunk *fail_sound = Mix_LoadWAV("sound/fail.wav");
         while(!main_menu.quit.is_clicked){
-            cout << id << ' ' << id1 << '\n';
+//            cout << id << ' ' << id1 << '\n';
             switch (id){
                 case 0:{
                     main_menu.draw(id, back_ground_music.cnt);
@@ -161,7 +161,10 @@ struct Admin{
                     music = Mix_LoadMUS(tmp.c_str());
                     Mix_PlayMusic(music, -1);
                     normal_mod.store_snake.init();
-                    score = normal_mod.wait(id, id1);
+                    normal_mod.snake.init();
+                    score = normal_mod.wait(id, id1, id2);
+                    if (score > 1000) score = 0;
+                    score = max(score, 0);
                     Mix_FadeOutMusic(50);
                     Mix_FreeMusic(music);
                     game_over.init(score);
@@ -175,7 +178,9 @@ struct Admin{
                     cout << "music.cnt is " << back_ground_music.cnt << '\n';
                     music = Mix_LoadMUS(tmp.c_str());
                     Mix_PlayMusic(music, -1);
-                    score = normal_mod.wait(id, id1);
+                    score = normal_mod.wait(id, id1, id2);
+                    if (score > 1000) score = 0;
+                    score = max(score, 0);
                     Mix_FadeOutMusic(50);
                     Mix_FreeMusic(music);
                     game_over.init(score);
@@ -183,7 +188,7 @@ struct Admin{
                     break;
                 }
                 case 2:{
-                    pause_screen.draw(id, id1);
+                    pause_screen.draw(id, id1, id2);
                     show();
                     pause_screen.wait();
                     // pause screen
@@ -219,7 +224,10 @@ struct Admin{
                     Mix_PlayMusic(music, -1);
 //                    SDL_Delay(5000);
                     ai_mode.store_snake.init();
-                    score = ai_mode.wait(id, id1);
+                    ai_mode.snake.init();
+                    score = ai_mode.wait(id, id1, id2);
+                    if (score > 1000) score = 0;
+                    score = max(score, 0);
                     Mix_FadeOutMusic(50);
                     Mix_FreeMusic(music);
                     game_over.init(score);
@@ -233,7 +241,9 @@ struct Admin{
                     cout << "music.cnt is " << back_ground_music.cnt << '\n';
                     music = Mix_LoadMUS(tmp.c_str());
                     Mix_PlayMusic(music, -1);
-                    score = ai_mode.wait(id, id1);
+                    score = ai_mode.wait(id, id1, id2);
+                    if (score > 1000) score = 0;
+                    score = max(score, 0);
                     Mix_FadeOutMusic(50);
                     Mix_FreeMusic(music);
                     game_over.init(score);

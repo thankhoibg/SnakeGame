@@ -14,7 +14,7 @@ struct Snake{
     int dir, dem = 0, length = 3, score = 0;
     bool is_alive = true;
     deque<Block> snake;
-    Block food, big_food;
+    Block food, big_food, small_food;
     clock_t start_time;
     Button score_board;
 
