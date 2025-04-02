@@ -8,7 +8,7 @@
 # Description
 ***Game description and instruction***
 
-+ Đây là trò chơi rắn săn mồi hay nhất từ trước đến nay với nhiều tính năng hay, vượt trội. Game tổng cộng có 2 chế độ chơi, người chơi chọn Play Game và thao tác ở màn hình chính: 
++ Đây là trò chơi rắn săn mồi như chúng ta đã biết. Game tổng cộng có 2 chế độ chơi, người chơi chọn Play Game và thao tác ở màn hình chính: 
    + Chế độ 1: Đây là chế độ một người chơi, là một chế độ rắn săn mồi cơ bản như chúng ta đã biết
    + Chế độ 2 : ***AI*** đây là chế độ với AI, người chơi được AI hỗ trợ, tìm ra đường đi gần như tối ưu
 + Game có hỗ trợ mọi tính năng cần thiết :
